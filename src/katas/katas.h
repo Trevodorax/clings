@@ -49,21 +49,20 @@ typedef struct kata_list {
 /**
  * @brief Represents the result of querying a kata list.
  *
- * The `kata_list_parsing_result_t` structure is used to represent the result
- * of parsing a kata list. It contains a boolean `success` field indicating
- * whether the parsing was successful. In case of success, the structure includes
+ * The `kata_list_fetch_result_t` structure is used to represent the result
+ * of fetching a kata list. It contains a boolean `success` field indicating
+ * whether the fetching was successful. In case of success, the structure includes
  * a `kata_list_t` union member representing the parsed kata list. In case of
  * failure, it includes an `error_message` union member containing an error message.
  *
  * Example Usage:
  * @code
- * kata_list_parsing_result_t result = ...
+ * kata_list_fetch_result_t result = ...
  * if (result.success) {
  *     // Parsing was successful, use result.kata_list...
  *     free_kata_list(&result.kata_list);
  * } else {
  *     // Parsing failed, handle the error with result.error_message...
- *     free(result.error_message);
  * }
  * @endcode
  *
@@ -71,13 +70,13 @@ typedef struct kata_list {
  * @see kata_list_parsing_result_t
  * @see free_kata_list
  */
-typedef struct kata_list_query_result {
+typedef struct kata_list_fetch_result {
     bool success;
     union {
         kata_list_t kata_list;
         const char *error_message;
     };
-} kata_list_query_result_t;
+} kata_list_fetch_result_t;
 
 
 /**
@@ -162,7 +161,5 @@ void push_kata_in_list(kata_t kata, kata_list_t *list);
  * @see empty_sized_string
  */
 kata_t no_kata(void);
-
-kata_t kata_t_of(const char* name, const char* path);
 
 #endif //CLINGS_KATAS_H

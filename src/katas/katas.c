@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include "katas.h"
 
 
@@ -36,9 +35,3 @@ kata_t no_kata(void) {
     };
 }
 
-kata_t kata_t_of(const char* name, const char* path) {
-    return (kata_t) {
-        .name = copy_str_to_sized_string((char*)name, strlen(name)),
-        .path = copy_str_to_sized_string((char*)path, strlen(path)),
-    };
-}

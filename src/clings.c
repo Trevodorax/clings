@@ -7,7 +7,7 @@
 #include "configuration/get_kata_list/get_kata_list.h"
 
 int clings(void) {
-    const kata_list_query_result_t kata_list_query_result = get_kata_list();
+    const kata_list_fetch_result_t kata_list_query_result = get_kata_list();
 
     if (!kata_list_query_result.success) {
         fprintf(stderr, "Failed to parse kata list: %s\n", kata_list_query_result.error_message);
