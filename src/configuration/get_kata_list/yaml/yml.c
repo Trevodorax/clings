@@ -12,9 +12,11 @@ key_value_parsed_t parse_key_value(yaml_parser_t *parser, yaml_event_t *event);
 
 kata_t parse_kata(yaml_parser_t *parser, yaml_event_t *event);
 
-kata_list_parsing_result_t kata_list_parsing_error(void);
+kata_list_query_result_t kata_list_parsing_error(void);
 
 void free_key_value_parsed(key_value_parsed_t *key_value_parsed);
+
+kata_list_query_result_t parse_kata_list_from_sequence(yaml_parser_t *parser, yaml_event_t *event);
 
 /**
  * @brief Parse the next event from the parser and store it in the event pointer.
@@ -22,7 +24,7 @@ void free_key_value_parsed(key_value_parsed_t *key_value_parsed);
  */
 bool yaml_parse_next(yaml_parser_t * parser, yaml_event_t * event);
 
-kata_list_parsing_result_t parse_kata_list(yaml_parser_t * parser) {
+kata_list_query_result_t parse_kata_list(yaml_parser_t * parser) {
     yaml_event_t event;
     kata_list_t kata_list = {.katas = NULL, .len = 0};
     while (true) {
@@ -38,7 +40,7 @@ kata_list_parsing_result_t parse_kata_list(yaml_parser_t * parser) {
         }
     }
     yaml_event_delete(&event);
-    return (kata_list_parsing_result_t) {
+    return (kata_list_query_result_t) {
             .success = true,
             .kata_list = kata_list
     };
@@ -53,10 +55,10 @@ bool yaml_parse_next(yaml_parser_t *parser, yaml_event_t *event) {
     return success;
 }
 
-kata_list_parsing_result_t kata_list_parsing_error(void) {
-    return (kata_list_parsing_result_t) {
+kata_list_query_result_t kata_list_parsing_error(void) {
+    return (kata_list_query_result_t) {
             .success = false,
-            .error_message = "Failed to parse file info.yml"
+            .error_message = "Failed to parse file yaml."
     };
 }
 

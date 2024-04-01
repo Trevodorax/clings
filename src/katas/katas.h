@@ -47,7 +47,7 @@ typedef struct kata_list {
 } kata_list_t;
 
 /**
- * @brief Represents the result of parsing a kata list.
+ * @brief Represents the result of querying a kata list.
  *
  * The `kata_list_parsing_result_t` structure is used to represent the result
  * of parsing a kata list. It contains a boolean `success` field indicating
@@ -71,13 +71,13 @@ typedef struct kata_list {
  * @see kata_list_parsing_result_t
  * @see free_kata_list
  */
-typedef struct kata_list_parsing_result {
+typedef struct kata_list_query_result {
     bool success;
     union {
         kata_list_t kata_list;
-        char *error_message;
+        const char *error_message;
     };
-} kata_list_parsing_result_t;
+} kata_list_query_result_t;
 
 
 /**
@@ -162,5 +162,7 @@ void push_kata_in_list(kata_t kata, kata_list_t *list);
  * @see empty_sized_string
  */
 kata_t no_kata(void);
+
+kata_t kata_t_of(const char* name, const char* path);
 
 #endif //CLINGS_KATAS_H

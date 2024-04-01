@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -pedantic")
 
 include_directories(src)
-add_subdirectory(src/yaml)
+add_subdirectory(src/configuration)
 
 add_executable(clings main.c
         src/execution/execution.c
@@ -20,4 +20,4 @@ if(NOT ${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     file(COPY katas DESTINATION ${CMAKE_BINARY_DIR})
 endif ()
 
-target_link_libraries(clings PUBLIC clings_yaml)
+target_link_libraries(clings PUBLIC configuration)

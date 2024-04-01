@@ -4,24 +4,16 @@
 #include "execution/execution.h"
 #include "result_handler/result_handler.h"
 #include "katas/katas.h"
-#include "yaml/yml.h"
-#include "yaml/yaml_parser_factory.h"
+#include "configuration/get_kata_list/get_kata_list.h"
 
 int clings(void) {
-    yaml_parser_t parser = parser_factory("info.yml");
-    if(parser.error != YAML_NO_ERROR) {
-        fprintf(stderr, "Failed to open yaml file: %s\n", parser.problem);
+    const kata_list_query_result_t kata_list_query_result = get_kata_list();
+
+    if (!kata_list_query_result.success) {
+        fprintf(stderr, "Failed to parse kata list: %s\n", kata_list_query_result.error_message);
         return EXIT_FAILURE;
     }
-
-    kata_list_parsing_result_t kata_list_parsing_result = parse_kata_list(&parser);
-    yaml_parser_delete(&parser);
-
-    if (!kata_list_parsing_result.success) {
-        fprintf(stderr, "Failed to parse kata list: %s\n", kata_list_parsing_result.error_message);
-        return EXIT_FAILURE;
-    }
-    kata_list_t kata_list = kata_list_parsing_result.kata_list;
+    kata_list_t kata_list = kata_list_query_result.kata_list;
 
     bool no_kata = kata_list.len == 0;
     if (no_kata) return EXIT_SUCCESS;

@@ -14,10 +14,10 @@
  * (those with non-empty names and paths) are added to the resulting kata list.
  *
  * @param parser The YAML parser to use for parsing the stream.
- * @return A kata_list_parsing_result_t structure representing the result of the parsing operation.
+ * @return A kata_list_query_result_t structure representing the result of the parsing operation.
  *         The structure contains a success flag and the parsed kata list.
  *         If an error occurs during parsing, the success flag will be false.
  */
-kata_list_parsing_result_t parse_kata_list(yaml_parser_t *parser);
+kata_list_query_result_t parse_kata_list(yaml_parser_t *parser);
 
 #endif //CLINGS_YML_H

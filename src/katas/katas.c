@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "katas.h"
 
 
@@ -11,8 +12,10 @@ void free_kata_list(kata_list_t *kata_list) {
 }
 
 void free_kata(kata_t *kata) {
-    free_sized_string(&kata->name);
-    free_sized_string(&kata->path);
+    if(kata) {
+        free_sized_string(&kata->name);
+        free_sized_string(&kata->path);
+    }
 }
 
 void push_kata_in_list(kata_t kata, kata_list_t *list) {
@@ -30,5 +33,12 @@ kata_t no_kata(void) {
     return (kata_t) {
             .name = empty_sized_string(),
             .path = empty_sized_string()
+    };
+}
+
+kata_t kata_t_of(const char* name, const char* path) {
+    return (kata_t) {
+        .name = copy_str_to_sized_string((char*)name, strlen(name)),
+        .path = copy_str_to_sized_string((char*)path, strlen(path)),
     };
 }
