@@ -47,7 +47,7 @@ typedef struct kata_list {
 } kata_list_t;
 
 /**
- * @brief Represents the result of querying a kata list.
+ * @brief Represents the result of fetching a kata list.
  *
  * The `kata_list_fetch_result_t` structure is used to represent the result
  * of fetching a kata list. It contains a boolean `success` field indicating

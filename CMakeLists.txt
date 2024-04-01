@@ -16,7 +16,6 @@ add_executable(clings main.c
 )
 
 if(NOT ${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
-    file(COPY info.yml DESTINATION ${CMAKE_BINARY_DIR})
     file(COPY katas DESTINATION ${CMAKE_BINARY_DIR})
 endif ()
 
