@@ -19,12 +19,13 @@ void free_kata(kata_t *kata) {
 
 void push_kata_in_list(kata_t kata, kata_list_t *list) {
     list->len++;
-    list->katas = (kata_t *) reallocf(list->katas, list->len * sizeof(kata_t));
-    if(list->katas == NULL) {
+    kata_t * reallocated = (kata_t *) realloc(list->katas, list->len * sizeof(kata_t));
+    if(reallocated == NULL) {
         fprintf(stderr, "Failed to allocate memory for kata list.");
         free_kata_list(list);
         exit(EXIT_FAILURE);
     }
+    list->katas = reallocated;
     list->katas[list->len - 1] = kata;
 }
 
