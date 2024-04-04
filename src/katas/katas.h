@@ -142,24 +142,4 @@ void free_kata_list(kata_list_t *kata_list);
  */
 void push_kata_in_list(kata_t kata, kata_list_t *list);
 
-
-/**
- * @brief Creates a default `kata_t` structure with empty strings.
- *
- * This function returns a default `kata_t` structure with empty strings for
- * both the name and path.
- *
- * Example Usage:
- * @code
- * kata_t default_kata = no_kata();
- * // Now, `default_kata` contains a kata with empty name and path.
- * @endcode
- *
- * @return A `kata_t` structure with empty-sized strings for name and path.
- *
- * @see kata_t
- * @see empty_sized_string
- */
-kata_t no_kata(void);
-
 #endif //CLINGS_KATAS_H

@@ -18,7 +18,7 @@ int clings(void) {
     bool no_kata = kata_list.len == 0;
     if (no_kata) return EXIT_SUCCESS;
 
-    sized_string_t result_buffer = new_sized_string(256);
+    sized_string_t result_buffer = new_sized_string_of_length(256);
 
     for (size_t i = 0; i < kata_list.len; i++) {
         kata_status result = run_kata(kata_list.katas[i], result_buffer);

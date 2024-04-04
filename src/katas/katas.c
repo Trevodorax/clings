@@ -28,11 +28,3 @@ void push_kata_in_list(kata_t kata, kata_list_t *list) {
     list->katas = reallocated;
     list->katas[list->len - 1] = kata;
 }
-
-kata_t no_kata(void) {
-    return (kata_t) {
-            .name = empty_sized_string(),
-            .path = empty_sized_string()
-    };
-}
-
