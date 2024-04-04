@@ -45,6 +45,38 @@ typedef struct sized_string_t {
 sized_string_t new_sized_string(size_t len);
 
 /**
+ * @brief Creates a new `sized_string_t` object from a null-terminated string.
+ *
+ * This function dynamically allocates a new `sized_string_t` struct and initializes it with
+ * the content of the provided string (char *). The size of the new `sized_string_t` object is
+ * determined by the length of the input string. If the input string is NULL, the function
+ * returns a `sized_string_t` object with size 0 and no content. The length includes the
+ * terminating character '\0'.
+ *
+ * @param string A pointer to the null-terminated string from which to create the `sized_string_t` object.
+ *               If this parameter is NULL, a `sized_string_t` object representing an empty string is returned.
+ *
+ * @return A `sized_string_t` object containing the content of the provided string and its size.
+ *         If the input string is NULL, returns a `sized_string_t` object with size 0.
+ *
+ * @note The returned `sized_string_t` object is dynamically allocated and should be freed
+ *       appropriately by the caller to avoid memory leaks with the function @code free_sized_string() @endcode
+ *
+ * Example Usage:
+ * @code
+ * char *my_string = "Hello";
+ * sized_string_t my_sized_string = new_sized_string_from_string(my_string);
+ * // Now, `my_string` contains the struct {.string = (allocted) "Hello", len = 6 }.
+ * @endcode
+ */
+sized_string_t new_sized_string_from_string(char *string);
+
+
+sized_string_t clone_sized_string(sized_string_t string);
+
+sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t second);
+
+/**
  * @brief Copies a given string to a sized string.
  *
  * This function creates a new `sized_string_t` structure by copying the
