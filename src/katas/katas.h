@@ -47,23 +47,22 @@ typedef struct kata_list {
 } kata_list_t;
 
 /**
- * @brief Represents the result of parsing a kata list.
+ * @brief Represents the result of fetching a kata list.
  *
- * The `kata_list_parsing_result_t` structure is used to represent the result
- * of parsing a kata list. It contains a boolean `success` field indicating
- * whether the parsing was successful. In case of success, the structure includes
+ * The `kata_list_fetch_result_t` structure is used to represent the result
+ * of fetching a kata list. It contains a boolean `success` field indicating
+ * whether the fetching was successful. In case of success, the structure includes
  * a `kata_list_t` union member representing the parsed kata list. In case of
  * failure, it includes an `error_message` union member containing an error message.
  *
  * Example Usage:
  * @code
- * kata_list_parsing_result_t result = ...
+ * kata_list_fetch_result_t result = ...
  * if (result.success) {
  *     // Parsing was successful, use result.kata_list...
  *     free_kata_list(&result.kata_list);
  * } else {
  *     // Parsing failed, handle the error with result.error_message...
- *     free(result.error_message);
  * }
  * @endcode
  *
@@ -71,13 +70,13 @@ typedef struct kata_list {
  * @see kata_list_parsing_result_t
  * @see free_kata_list
  */
-typedef struct kata_list_parsing_result {
+typedef struct kata_list_fetch_result {
     bool success;
     union {
         kata_list_t kata_list;
-        char *error_message;
+        const char *error_message;
     };
-} kata_list_parsing_result_t;
+} kata_list_fetch_result_t;
 
 
 /**
@@ -142,25 +141,5 @@ void free_kata_list(kata_list_t *kata_list);
  * @see free_kata_list
  */
 void push_kata_in_list(kata_t kata, kata_list_t *list);
-
-
-/**
- * @brief Creates a default `kata_t` structure with empty strings.
- *
- * This function returns a default `kata_t` structure with empty strings for
- * both the name and path.
- *
- * Example Usage:
- * @code
- * kata_t default_kata = no_kata();
- * // Now, `default_kata` contains a kata with empty name and path.
- * @endcode
- *
- * @return A `kata_t` structure with empty-sized strings for name and path.
- *
- * @see kata_t
- * @see empty_sized_string
- */
-kata_t no_kata(void);
 
 #endif //CLINGS_KATAS_H
