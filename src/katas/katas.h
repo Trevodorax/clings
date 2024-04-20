@@ -18,6 +18,7 @@
 typedef struct kata {
     sized_string_t name;
     sized_string_t path;
+    bool is_done;
 } kata_t;
 
 
