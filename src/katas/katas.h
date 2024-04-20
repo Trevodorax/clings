@@ -9,8 +9,9 @@
  * @brief Represents a kata with name and path information.
  *
  * The `kata_t` structure is used to represent a kata, which consists of a
- * `sized_string_t` for the kata's name (`name`) and another `sized_string_t`
- * for the kata's path (`path`).
+ * `sized_string_t` for the kata's name (`name`), another `sized_string_t`
+ * for the kata's path (`path`) and a boolean representing if it is
+ * done or not done.
  *
  * @see sized_string_t
  * @see free_kata
