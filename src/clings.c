@@ -21,13 +21,11 @@ int clings(void) {
     sized_string_t result_buffer = new_sized_string_of_length(256);
 
     for (size_t i = 0; i < kata_list.len; i++) {
-        kata_status result = run_kata(kata_list.katas[i], result_buffer);
-        handle_kata_result(result, result_buffer);
-
-        if (result != KATA_SUCCESS) {
+        kata_t kata = kata_list.katas[i];
+        if(!kata.is_done) {
+            kata_status result = run_kata(kata, result_buffer);
+            handle_kata_result(result, result_buffer);
             break;
-        } else {
-            printf("====================\n\n");
         }
     }
 
