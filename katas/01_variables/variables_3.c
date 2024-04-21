@@ -3,8 +3,8 @@
 
 #include <stdlib.h>
 
-int main() {
-    int a = 1 + 1;
+int main(void) {
+    int = 5;
 
     return EXIT_SUCCESS;
 }
