@@ -5,10 +5,10 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -pedantic -Wconversion")
 
 add_subdirectory(src/configuration)
+add_subdirectory(src/types)
 
 add_executable(clings main.c
         src/execution/execution.c
-        src/types/sized_string.c
         src/result_handler/result_handler.c
         src/clings.c
         src/katas/katas.c
@@ -20,15 +20,8 @@ endif ()
 
 target_include_directories(clings PUBLIC src)
 target_link_libraries(clings PUBLIC configuration)
+target_link_libraries(clings PUBLIC types)
 
 
-enable_testing()
 add_subdirectory(src/test_utils)
-
-add_executable(sized_string_test
-        src/types/sized_string_test.c
-        src/types/sized_string.c
-)
-target_include_directories(sized_string_test PUBLIC src/test_utils)
-target_link_libraries(sized_string_test PUBLIC clings_test_utils)
-add_test(NAME sized_string_test COMMAND sized_string_test)
+target_link_libraries(sized_string_test PUBLIC test_utils)

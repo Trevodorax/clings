@@ -1,7 +1,7 @@
 #include "types.h"
 #include "string.h"
 #include "stdio.h"
-#include "clings_test_utils.h"
+#include "test_utils.h"
 
 
 static const char * all_tests(void);

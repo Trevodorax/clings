@@ -1,4 +1,4 @@
-project(clings_test_utils C)
+project(test_utils C)
 
-add_library(clings_test_utils INTERFACE)
-target_include_directories(clings_test_utils INTERFACE .)
+add_library(test_utils INTERFACE)
+target_include_directories(test_utils INTERFACE .)

@@ -1,5 +1,5 @@
-#ifndef CLINGS_CLINGS_TEST_UTILS_H
-#define CLINGS_CLINGS_TEST_UTILS_H
+#ifndef CLINGS_TEST_UTILS_H
+#define CLINGS_TEST_UTILS_H
 
 #include "stdlib.h"
 
@@ -18,4 +18,4 @@
 #define TEST_SUCCESS EXIT_SUCCESS
 typedef const char * test_result;
 
-#endif //CLINGS_CLINGS_TEST_UTILS_H
+#endif //CLINGS_TEST_UTILS_H
