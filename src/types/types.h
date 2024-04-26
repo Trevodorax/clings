@@ -1,8 +1,7 @@
 #ifndef CLINGS_TYPES_H
 #define CLINGS_TYPES_H
 
-#include <stddef.h>
-#include <stdlib.h>
+#include "stdlib.h"
 
 typedef enum {
     KATA_SUCCESS, // the kata is done
@@ -27,7 +26,7 @@ typedef enum {
  * // Now, `my_string` represents a string with content "Hello, World!" and length 13.
  * @endcode
  *
- * @see copy_str_to_sized_string
+ * @see new_sized_string_from_str_of_length
  * @see new_sized_string_of_length
  * @see empty_sized_string
  */
@@ -140,7 +139,7 @@ sized_string_t clone_sized_string(sized_string_t string);
 sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t second);
 
 /**
- * @brief Copies a given string to a sized string.
+ * @brief Create new sized string from a given string(char*) with specified length.
  *
  * This function creates a new `sized_string_t` structure by copying the
  * specified string (char *) with the given length (NOT including
@@ -155,17 +154,17 @@ sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t seco
  * Examples Usage:
  * @code
  * char * str = "Hello";
- * sized_string_t hello_str = copy_str_to_sized_string(str, strlen(str));
+ * sized_string_t hello_str = new_sized_string_from_str_of_length(str, strlen(str));
  * // Now, `hello_str` contains the copied string "Hello\0" with length 5.
  * @endcode
  *
  * @code
- * copy_str_to_sized_string("abcdef", 3);
+ * new_sized_string_from_str_of_length("abcdef", 3);
  * // Will return -> {str: "abc\0", len: 3}
  * @endcode
  *
  * @code
- * copy_str_to_sized_string("abc", 5);
+ * new_sized_string_from_str_of_length("abc", 5);
  * // Will return -> {str: "abc\0\0\0", len: 5}
  * @endcode
  *
@@ -176,7 +175,7 @@ sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t seco
  *
  * @see sized_string_t
  */
-sized_string_t copy_str_to_sized_string(char * str, size_t len);
+sized_string_t new_sized_string_from_str_of_length(char * str, size_t len);
 
 /**
  * @brief Frees the memory allocated for a sized_string_t
