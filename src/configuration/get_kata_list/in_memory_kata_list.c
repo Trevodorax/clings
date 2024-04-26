@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "get_kata_list.h"
-#include "katas/katas.h"
 
 typedef struct kata_file {
         const char* name;
