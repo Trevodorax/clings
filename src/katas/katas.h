@@ -4,6 +4,7 @@
 #include "types/types.h"
 #include "stdbool.h"
 
+typedef void *(*reallocer)(void * ptr, size_t size);
 
 /**
  * @brief Represents a kata with name and path information.
@@ -41,7 +42,7 @@ typedef struct kata {
  *
  * @see kata_t
  * @see free_kata_list
- * @see push_kata_in_list
+ * @see push_kata_in_list_with_realloc
  */
 typedef struct kata_list {
     kata_t *katas;
@@ -114,7 +115,7 @@ void free_kata(kata_t *kata);
  * @param kata_list The `kata_list_t` structure to be freed.
  *
  * @see kata_list_t
- * @see push_kata_in_list
+ * @see push_kata_in_list_with_realloc
  */
 void free_kata_list(kata_list_t *kata_list);
 
@@ -131,7 +132,7 @@ void free_kata_list(kata_list_t *kata_list);
  * @code
  * kata_t my_kata =  ... ;
  * kata_list_t my_kata_list = ... ;
- * push_kata_in_list(my_kata, &my_kata_list);
+ * push_kata_in_list_with_realloc(my_kata, &my_kata_list);
  * // Now, `my_kata_list` contains the newly added kata.
  * @endcode
  *
@@ -142,6 +143,7 @@ void free_kata_list(kata_list_t *kata_list);
  * @see kata_list_t
  * @see free_kata_list
  */
-void push_kata_in_list(kata_t kata, kata_list_t *list);
+void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, reallocer r);
+#define push_kata_in_list(kata, list) push_kata_in_list_with_realloc(kata, list, &realloc)
 
 #endif //CLINGS_KATAS_H

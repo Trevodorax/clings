@@ -2,6 +2,7 @@
 #define CLINGS_TEST_UTILS_H
 
 #include "stdlib.h"
+#include "string.h"
 
 
 #define stringify(x) #x

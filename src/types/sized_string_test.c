@@ -4,7 +4,7 @@
 #include "test_utils.h"
 
 
-static const char * all_tests(void);
+static test_result all_tests(void);
 
 int main(void) {
     const char * result = all_tests();
@@ -30,19 +30,19 @@ static test_result should_create_new_sized_string_of_length_zero(void);
 static test_result should_get_null_string_if_memory_allocation_fails(void);
 static test_result should_create_new_sized_string_from_existing_string(void);
 static test_result should_create_new_sized_string_from_empty_string(void);
-static test_result should_create_new_sized_string_from_NULL(void);
+static test_result should_create_new_sized_string_from_null(void);
 static test_result should_clone_string(void);
 static test_result cloned_sized_string_should_have_different_memory_address(void);
-static test_result clone_NULL_should_create_empty_string(void);
+static test_result clone_null_should_create_empty_string(void);
 static test_result should_concat_two_strings(void);
 static test_result should_concat_with_empty_string(void);
 static test_result should_concat_with_null_string(void);
-static test_result free_sized_string_should_set_pointer_to_NULL_and_length_to_zero(void);
-static test_result free_NULL_sized_string_should_do_nothing(void);
+static test_result free_sized_string_should_set_pointer_to_null_and_length_to_zero(void);
+static test_result free_null_sized_string_should_do_nothing(void);
 static test_result should_create_new_sized_string_from_str_with_length(void);
 static test_result create_new_sized_string_from_str_with_more_length_than_enough_should_fill_with_terminating_char(void);
 static test_result create_new_sized_string_from_str_with_not_enough_should_truncate_string(void);
-static test_result create_new_sized_string_from_NULL_should_create_empty_string(void);
+static test_result create_new_sized_string_from_null_should_create_empty_string(void);
 
 static test_result all_tests(void) {
     run_test(should_create_new_sized_string_of_length);
@@ -50,19 +50,19 @@ static test_result all_tests(void) {
     run_test(should_get_null_string_if_memory_allocation_fails);
     run_test(should_create_new_sized_string_from_existing_string);
     run_test(should_create_new_sized_string_from_empty_string);
-    run_test(should_create_new_sized_string_from_NULL);
+    run_test(should_create_new_sized_string_from_null);
     run_test(should_clone_string);
     run_test(cloned_sized_string_should_have_different_memory_address);
-    run_test(clone_NULL_should_create_empty_string);
+    run_test(clone_null_should_create_empty_string);
     run_test(should_concat_two_strings);
     run_test(should_concat_with_empty_string);
     run_test(should_concat_with_null_string);
-    run_test(free_sized_string_should_set_pointer_to_NULL_and_length_to_zero);
-    run_test(free_NULL_sized_string_should_do_nothing);
+    run_test(free_sized_string_should_set_pointer_to_null_and_length_to_zero);
+    run_test(free_null_sized_string_should_do_nothing);
     run_test(should_create_new_sized_string_from_str_with_length);
     run_test(create_new_sized_string_from_str_with_more_length_than_enough_should_fill_with_terminating_char);
     run_test(create_new_sized_string_from_str_with_not_enough_should_truncate_string);
-    run_test(create_new_sized_string_from_NULL_should_create_empty_string);
+    run_test(create_new_sized_string_from_null_should_create_empty_string);
     return NULL;
 }
 
@@ -125,7 +125,7 @@ static test_result should_create_new_sized_string_from_empty_string(void) {
 }
 
 
-static test_result should_create_new_sized_string_from_NULL(void) {
+static test_result should_create_new_sized_string_from_null(void) {
     string = new_sized_string_from(NULL);
     assert_is_not_null(string.str);
     assert_value_strict_equals_expected(string.len, 0);
@@ -162,7 +162,7 @@ static test_result cloned_sized_string_should_have_different_memory_address(void
     return TEST_SUCCESS;
 }
 
-static test_result clone_NULL_should_create_empty_string(void) {
+static test_result clone_null_should_create_empty_string(void) {
     sized_string_t original = new_sized_string_from(NULL);
     sized_string_t clone = clone_sized_string(original);
 
@@ -250,7 +250,7 @@ static test_result should_concat_with_null_string(void) {
     return TEST_SUCCESS;
 }
 
-static test_result free_sized_string_should_set_pointer_to_NULL_and_length_to_zero(void) {
+static test_result free_sized_string_should_set_pointer_to_null_and_length_to_zero(void) {
     string = new_sized_string_from("clings");
     free_sized_string(&string);
     assert_is_null(string.str);
@@ -259,7 +259,7 @@ static test_result free_sized_string_should_set_pointer_to_NULL_and_length_to_ze
     return TEST_SUCCESS;
 }
 
-static test_result free_NULL_sized_string_should_do_nothing(void) {
+static test_result free_null_sized_string_should_do_nothing(void) {
     string = (sized_string_t) {.str = NULL, .len = 0};
     free_sized_string(&string);
     assert_is_null(string.str);
@@ -301,7 +301,7 @@ static test_result create_new_sized_string_from_str_with_not_enough_should_trunc
     return TEST_SUCCESS;
 }
 
-static test_result create_new_sized_string_from_NULL_should_create_empty_string(void) {
+static test_result create_new_sized_string_from_null_should_create_empty_string(void) {
     string = new_sized_string_from_str_of_length(NULL, 3);
 
     assert_is_not_null(string.str);

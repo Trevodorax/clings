@@ -20,7 +20,7 @@ const char* KATA_NOT_DONE_COMMENT = "// I AM NOT DONE";
 
 sized_string_t kata_path_from_directory_and_name(sized_string_t directory, sized_string_t kata_name);
 
-kata_t kata_of(sized_string_t name, sized_string_t directory);
+kata_t kata_from_name_and_directory(sized_string_t name, sized_string_t directory);
 
 sized_string_t c_file_name_of(sized_string_t name);
 
@@ -37,7 +37,7 @@ kata_list_fetch_result_t get_kata_list(void) {
         sized_string_t name = new_sized_string_from((char *) kata_file.name);
         sized_string_t directory = new_sized_string_from((char *) kata_file.directory);
 
-        push_kata_in_list(kata_of(name, directory), &kata_list);
+        push_kata_in_list(kata_from_name_and_directory(name, directory), &kata_list);
 
         free_sized_string(&directory);
     }
@@ -48,7 +48,7 @@ kata_list_fetch_result_t get_kata_list(void) {
     };
 }
 
-kata_t kata_of(sized_string_t name, sized_string_t directory) {
+kata_t kata_from_name_and_directory(sized_string_t name, sized_string_t directory) {
     sized_string_t path = kata_path_from_directory_and_name(directory, name);
     return (kata_t) {
             .name = name,
