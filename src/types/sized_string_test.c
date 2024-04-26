@@ -16,7 +16,7 @@ static const char * all_tests(void);
 int main(void) {
     const char * result = all_tests();
     if(result == NULL) {
-        printf("ALL TESTS PASSED");
+        printf("ALL TESTS PASSED\n");
     } else {
         printf("%s\n", result);
     }
@@ -26,9 +26,7 @@ int main(void) {
 
 
 sized_string_t string = {.str = NULL, .len = 0};
-void before_each(void) {
-
-}
+void before_each(void) {}
 
 void tear_down(void) {
     free_sized_string(&string);
@@ -36,6 +34,7 @@ void tear_down(void) {
 
 static const char * should_create_new_sized_string_of_length(void);
 static const char * should_create_new_sized_string_of_length_zero(void);
+static const char * should_get_null_string_if_memory_allocation_fails(void);
 static const char * should_create_new_sized_string_from_existing_string(void);
 static const char * should_create_new_sized_string_from_empty_string(void);
 static const char * should_create_new_sized_string_from_NULL(void);
@@ -45,7 +44,7 @@ static const char * clone_NULL_should_create_empty_string(void);
 static const char * should_concat_two_strings(void);
 static const char * should_concat_with_empty_string(void);
 static const char * should_concat_with_null_string(void);
-static const char * free_sized_string_should_set_pointer_to_NULL(void);
+static const char * free_sized_string_should_set_pointer_to_NULL_and_length_to_zero(void);
 static const char * free_NULL_sized_string_should_do_nothing(void);
 static const char * should_create_new_sized_string_from_str_with_length(void);
 static const char * create_new_sized_string_from_str_with_more_length_than_enough_should_fill_with_terminating_char(void);
@@ -55,6 +54,7 @@ static const char * create_new_sized_string_from_NULL_should_create_empty_string
 static const char * all_tests(void) {
     run_test(should_create_new_sized_string_of_length);
     run_test(should_create_new_sized_string_of_length_zero);
+    run_test(should_get_null_string_if_memory_allocation_fails);
     run_test(should_create_new_sized_string_from_existing_string);
     run_test(should_create_new_sized_string_from_empty_string);
     run_test(should_create_new_sized_string_from_NULL);
@@ -64,7 +64,7 @@ static const char * all_tests(void) {
     run_test(should_concat_two_strings);
     run_test(should_concat_with_empty_string);
     run_test(should_concat_with_null_string);
-    run_test(free_sized_string_should_set_pointer_to_NULL);
+    run_test(free_sized_string_should_set_pointer_to_NULL_and_length_to_zero);
     run_test(free_NULL_sized_string_should_do_nothing);
     run_test(should_create_new_sized_string_from_str_with_length);
     run_test(create_new_sized_string_from_str_with_more_length_than_enough_should_fill_with_terminating_char);
@@ -97,7 +97,18 @@ static const char * should_create_new_sized_string_of_length_zero(void) {
     return EXIT_SUCCESS;
 }
 
-// test when memory allocation failed ? implies have to inject allocator and change signature
+void * failing_calloc(__attribute__((unused)) size_t count, __attribute__((unused)) size_t size) {
+    return NULL;
+}
+
+static const char * should_get_null_string_if_memory_allocation_fails(void) {
+    string = new_sized_string_of_length_with_calloc(5, &failing_calloc);
+
+    assert_is_null(string.str);
+    assert_value_strict_equals_expected(string.len, 0);
+
+    return EXIT_SUCCESS;
+}
 
 static const char * should_create_new_sized_string_from_existing_string(void) {
     string = new_sized_string_from("clings");
@@ -246,10 +257,11 @@ static const char * should_concat_with_null_string(void) {
     return EXIT_SUCCESS;
 }
 
-static const char * free_sized_string_should_set_pointer_to_NULL(void) {
+static const char * free_sized_string_should_set_pointer_to_NULL_and_length_to_zero(void) {
     string = new_sized_string_from("clings");
     free_sized_string(&string);
     assert_is_null(string.str);
+    assert_value_strict_equals_expected(string.len, 0);
 
     return EXIT_SUCCESS;
 }

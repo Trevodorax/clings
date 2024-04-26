@@ -4,6 +4,8 @@
 
 This project contains a collection of exercises to learn [C](https://en.wikipedia.org/wiki/C_(programming_language)) and is blazingly inspired by [Rustlings](https://github.com/rust-lang/rustlings).
 
+## Requirements
+* Having CMake [installed](https://cmake.org/download/)
 ## Quickstart
 
 You can build the project with the following commands:

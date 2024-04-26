@@ -1,9 +1,9 @@
 #include <string.h>
 #include "types.h"
 
-sized_string_t new_sized_string_of_length(size_t len) {
+sized_string_t new_sized_string_of_length_with_calloc(size_t len, callocer c) {
     sized_string_t string;
-    string.str = (char *) calloc(
+    string.str = (char *) (*c)(
             len + 1, // including the terminating null character '\0'.
             sizeof(char)
             );

@@ -35,6 +35,8 @@ typedef struct sized_string_t {
     size_t len;
 } sized_string_t;
 
+typedef void *(*callocer)(size_t count, size_t size);
+
 /**
  * @brief Creates a new sized_string_t with the specified length.
  * The string is filled of null character '\0';
@@ -48,7 +50,8 @@ typedef struct sized_string_t {
  * @param len The length of the string buffer to allocate
  * @return A sized_string_t with allocated string and specified length
  */
-sized_string_t new_sized_string_of_length(size_t len);
+sized_string_t new_sized_string_of_length_with_calloc(size_t len, callocer c);
+#define new_sized_string_of_length(len) new_sized_string_of_length_with_calloc(len, &calloc)
 
 /**
  * @brief Creates a new `sized_string_t` object from a null-terminated string.
