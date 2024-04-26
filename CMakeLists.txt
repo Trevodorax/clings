@@ -9,10 +9,7 @@ if(NOT ${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     file(COPY katas DESTINATION ${CMAKE_BINARY_DIR})
 endif ()
 
-add_executable(clings main.c
-        src/clings.c
-        src/result_handler/result_handler.c
-)
+add_executable(clings main.c src/clings.c)
 target_include_directories(clings PUBLIC src)
 add_subdirectory(src/test_utils)
 
@@ -38,4 +35,6 @@ target_link_libraries(execution PUBLIC types)
 target_link_libraries(execution_test PUBLIC test_utils)
 target_link_libraries(execution_test PUBLIC execution)
 
-
+add_subdirectory(src/result_handler)
+target_link_libraries(clings PUBLIC result_handler)
+target_link_libraries(result_handler PUBLIC types)
