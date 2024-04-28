@@ -1,9 +1,10 @@
 #include <string.h>
 #include "types.h"
 
-sized_string_t new_sized_string_of_length_with_calloc(size_t len, callocer c) {
+sized_string_t new_sized_string_of_length_with_calloc(size_t len, calloc_f calloc) {
     sized_string_t string;
-    string.str = (char *) (*c)(
+
+    string.str = (char *) (*calloc)( // call the parameter function pointer calloc (see calloc_f)
             len + 1, // including the terminating null character '\0'.
             sizeof(char)
             );

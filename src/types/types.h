@@ -35,7 +35,39 @@ typedef struct sized_string_t {
     size_t len;
 } sized_string_t;
 
-typedef void *(*callocer)(size_t count, size_t size);
+
+/**
+ * Typedef for a function pointer implementing the behavior of the calloc function.
+ *
+ * Functions matching this typedef are expected to allocate memory for an array
+ * of 'count' objects, each 'size' bytes in size. The memory is initialized to zero.
+ * The function returns a pointer to the allocated memory if the allocation is successful.
+ * If the allocation fails, the function returns NULL and sets the errno to ENOMEM.
+ *
+ * The main use of this typedef is to mock the calloc function for testing.
+ *
+ * @param count Number of elements to allocate memory for.
+ * @param size Size of each element in bytes.
+ * @return Pointer to the allocated memory block if successful; otherwise, NULL.
+ */
+typedef void *(*calloc_f)(size_t count, size_t size);
+
+/**
+ * Typedef for a function pointer implementing the behavior of the realloc function.
+ *
+ * Functions matching this typedef are expected to reallocate memory as specified by realloc,
+ * possibly moving it to a new location. The function returns a pointer to the newly
+ * allocated memory if the reallocation is successful. If the reallocation fails,
+ * the function returns NULL and sets the errno to ENOMEM.
+ *
+ * The main use of this typedef is to mock the realloc function for testing.
+ *
+ * @param ptr Pointer to the memory block previously allocated with malloc, calloc, or realloc.
+ * @param size New size in bytes for the memory block.
+ * @return Pointer to the reallocated memory block if successful; otherwise, NULL.
+ */
+typedef void *(*realloc_f)(void * ptr, size_t size);
+
 
 /**
  * @brief Creates a new sized_string_t with the specified length.
@@ -50,7 +82,7 @@ typedef void *(*callocer)(size_t count, size_t size);
  * @param len The length of the string buffer to allocate
  * @return A sized_string_t with allocated string and specified length
  */
-sized_string_t new_sized_string_of_length_with_calloc(size_t len, callocer c);
+sized_string_t new_sized_string_of_length_with_calloc(size_t len, calloc_f calloc);
 #define new_sized_string_of_length(len) new_sized_string_of_length_with_calloc(len, &calloc)
 
 /**

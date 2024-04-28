@@ -35,7 +35,7 @@ void tear_down(void) {
 static test_result should_get_file_not_found_if_file_does_not_exists(void);
 
 static test_result all_tests(void) {
-
+    should_get_file_not_found_if_file_does_not_exists();
     return EXIT_SUCCESS;
 }
 

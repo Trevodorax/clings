@@ -3,7 +3,7 @@
 
 
 void free_kata_list(kata_list_t *kata_list) {
-    if(kata_list->katas == NULL) return;
+    if (kata_list->katas == NULL) return;
     for (size_t i = 0; i < kata_list->len; i++) {
         free_kata(&kata_list->katas[i]);
     }
@@ -12,19 +12,22 @@ void free_kata_list(kata_list_t *kata_list) {
 }
 
 void free_kata(kata_t *kata) {
-    if(kata) {
+    if (kata) {
         free_sized_string(&kata->name);
         free_sized_string(&kata->path);
     }
 }
 
-void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, reallocer r) {
-    if(!list->katas) {
+void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f realloc) {
+    if (!list->katas) {
         list->len = 0;
     }
 
-    kata_t * reallocated = (kata_t *) (*r)(list->katas, (list->len+1) * sizeof(kata_t));
-    if(reallocated == NULL) {
+    kata_t *reallocated = (*realloc)( // call the parameter function pointer realloc (see realloc_f)
+            list->katas,
+            (list->len + 1) * sizeof(kata_t)
+    );
+    if (reallocated == NULL) {
         return;
     }
     list->len++;

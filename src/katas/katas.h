@@ -4,7 +4,6 @@
 #include "types/types.h"
 #include "stdbool.h"
 
-typedef void *(*reallocer)(void * ptr, size_t size);
 
 /**
  * @brief Represents a kata with name and path information.
@@ -143,7 +142,7 @@ void free_kata_list(kata_list_t *kata_list);
  * @see kata_list_t
  * @see free_kata_list
  */
-void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, reallocer r);
+void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f realloc);
 #define push_kata_in_list(kata, list) push_kata_in_list_with_realloc(kata, list, &realloc)
 
 #endif //CLINGS_KATAS_H
