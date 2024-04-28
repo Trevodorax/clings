@@ -1,4 +1,4 @@
-#include "../types/types.h"
+#include "types/types.h"
 
 #ifndef CLINGS_RESULT_HANDLER_H
 #define CLINGS_RESULT_HANDLER_H

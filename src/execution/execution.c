@@ -32,7 +32,7 @@ kata_status run_kata(const kata_t kata, sized_string_t result_buffer) {
     }
 
     // Read output to result_buffer
-    fread(result_buffer.str, (int)result_buffer.len, 1, fp);
+    fread(result_buffer.str, result_buffer.len, 1, fp);
     int status = pclose(fp);
 
     // Check execution status

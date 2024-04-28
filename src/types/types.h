@@ -1,8 +1,7 @@
 #ifndef CLINGS_TYPES_H
 #define CLINGS_TYPES_H
 
-#include <stddef.h>
-#include <stdlib.h>
+#include "stdlib.h"
 
 typedef enum {
     KATA_SUCCESS, // the kata is done
@@ -27,7 +26,7 @@ typedef enum {
  * // Now, `my_string` represents a string with content "Hello, World!" and length 13.
  * @endcode
  *
- * @see copy_str_to_sized_string
+ * @see new_sized_string_from_str_of_length
  * @see new_sized_string_of_length
  * @see empty_sized_string
  */
@@ -35,6 +34,40 @@ typedef struct sized_string_t {
     char * str;
     size_t len;
 } sized_string_t;
+
+
+/**
+ * Typedef for a function pointer implementing the behavior of the calloc function.
+ *
+ * Functions matching this typedef are expected to allocate memory for an array
+ * of 'count' objects, each 'size' bytes in size. The memory is initialized to zero.
+ * The function returns a pointer to the allocated memory if the allocation is successful.
+ * If the allocation fails, the function returns NULL and sets the errno to ENOMEM.
+ *
+ * The main use of this typedef is to mock the calloc function for testing.
+ *
+ * @param count Number of elements to allocate memory for.
+ * @param size Size of each element in bytes.
+ * @return Pointer to the allocated memory block if successful; otherwise, NULL.
+ */
+typedef void *(*calloc_f)(size_t count, size_t size);
+
+/**
+ * Typedef for a function pointer implementing the behavior of the realloc function.
+ *
+ * Functions matching this typedef are expected to reallocate memory as specified by realloc,
+ * possibly moving it to a new location. The function returns a pointer to the newly
+ * allocated memory if the reallocation is successful. If the reallocation fails,
+ * the function returns NULL and sets the errno to ENOMEM.
+ *
+ * The main use of this typedef is to mock the realloc function for testing.
+ *
+ * @param ptr Pointer to the memory block previously allocated with malloc, calloc, or realloc.
+ * @param size New size in bytes for the memory block.
+ * @return Pointer to the reallocated memory block if successful; otherwise, NULL.
+ */
+typedef void *(*realloc_f)(void * ptr, size_t size);
+
 
 /**
  * @brief Creates a new sized_string_t with the specified length.
@@ -49,7 +82,8 @@ typedef struct sized_string_t {
  * @param len The length of the string buffer to allocate
  * @return A sized_string_t with allocated string and specified length
  */
-sized_string_t new_sized_string_of_length(size_t len);
+sized_string_t new_sized_string_of_length_with_calloc(size_t len, calloc_f calloc);
+#define new_sized_string_of_length(len) new_sized_string_of_length_with_calloc(len, &calloc)
 
 /**
  * @brief Creates a new `sized_string_t` object from a null-terminated string.
@@ -140,7 +174,7 @@ sized_string_t clone_sized_string(sized_string_t string);
 sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t second);
 
 /**
- * @brief Copies a given string to a sized string.
+ * @brief Create new sized string from a given string(char*) with specified length.
  *
  * This function creates a new `sized_string_t` structure by copying the
  * specified string (char *) with the given length (NOT including
@@ -155,17 +189,17 @@ sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t seco
  * Examples Usage:
  * @code
  * char * str = "Hello";
- * sized_string_t hello_str = copy_str_to_sized_string(str, strlen(str));
+ * sized_string_t hello_str = new_sized_string_from_str_of_length(str, strlen(str));
  * // Now, `hello_str` contains the copied string "Hello\0" with length 5.
  * @endcode
  *
  * @code
- * copy_str_to_sized_string("abcdef", 3);
+ * new_sized_string_from_str_of_length("abcdef", 3);
  * // Will return -> {str: "abc\0", len: 3}
  * @endcode
  *
  * @code
- * copy_str_to_sized_string("abc", 5);
+ * new_sized_string_from_str_of_length("abc", 5);
  * // Will return -> {str: "abc\0\0\0", len: 5}
  * @endcode
  *
@@ -176,7 +210,7 @@ sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t seco
  *
  * @see sized_string_t
  */
-sized_string_t copy_str_to_sized_string(char * str, size_t len);
+sized_string_t new_sized_string_from_str_of_length(char * str, size_t len);
 
 /**
  * @brief Frees the memory allocated for a sized_string_t
