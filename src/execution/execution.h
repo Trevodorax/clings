@@ -6,14 +6,16 @@
 #define MAX_PATH_LENGTH 1024
 #define COMPILE_COMMAND "gcc -o /tmp/kata %s"
 #define RUN_COMMAND "/tmp/kata"
+#define MAX_OUTPUT_SIZE 2048
+
 
 /**
- * @brief Runs the kata at given index, and handles the result
+ * @brief Runs the kata
  *
  * @param kata The kata to run (cf. katas.h)
  * @param result_buffer String in which to write the result
  * @return The result status of the kata
  */
-kata_status run_kata(kata_t kata, sized_string_t result_buffer);
+run_kata_result_t run_kata(kata_t kata);
 
 #endif //CLINGS_EXECUTION_H

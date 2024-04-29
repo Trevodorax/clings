@@ -18,18 +18,16 @@ int clings(void) {
     bool no_kata = kata_list.len == 0;
     if (no_kata) return EXIT_SUCCESS;
 
-    sized_string_t result_buffer = new_sized_string_of_length(512);
-
     for (size_t i = 0; i < kata_list.len; i++) {
         kata_t kata = kata_list.katas[i];
         if(!kata.is_done) {
-            kata_status result = run_kata(kata, result_buffer);
-            handle_kata_result(result, result_buffer);
+            run_kata_result_t result = run_kata(kata);
+            handle_kata_result(result);
+            free_sized_string(&result.output);
             break;
         }
     }
 
-    free_sized_string(&result_buffer);
     free_kata_list(&kata_list);
 
     return EXIT_SUCCESS;
