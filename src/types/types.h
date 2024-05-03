@@ -5,7 +5,11 @@
 #include "mocks.h"
 
 typedef enum {
+    //success
     KATA_SUCCESS, // the kata is done
+    KATA_COMPILATION_SUCCESS, // error at compile time
+
+    //errors
     KATA_COMPILATION_FAILURE, // error at compile time
     KATA_EXECUTION_FAILURE, // error at run time
     KATA_TEST_FAILURE, // at least one unit test has failed
