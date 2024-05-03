@@ -145,4 +145,13 @@ void free_kata_list(kata_list_t *kata_list);
 void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f realloc);
 #define push_kata_in_list(kata, list) push_kata_in_list_with_realloc(kata, list, &realloc)
 
+/**
+ * @brief Checks if the file path of the kata exists
+ *
+ * @param kata The kata to check
+ * @return true if the file exists, false if not
+ */
+bool kata_file_exists_with_fopen(kata_t kata, fopen_f fopen);
+#define kata_file_exists(kata) kata_file_exists_with_fopen(kata, &fopen)
+
 #endif //CLINGS_KATAS_H

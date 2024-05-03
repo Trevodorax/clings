@@ -2,6 +2,7 @@
 #define CLINGS_TYPES_H
 
 #include "stdlib.h"
+#include "mocks.h"
 
 typedef enum {
     KATA_SUCCESS, // the kata is done
@@ -42,38 +43,6 @@ typedef struct run_kata_result {
         sized_string_t error;
     };
 } run_kata_result_t;
-
-/**
- * Typedef for a function pointer implementing the behavior of the calloc function.
- *
- * Functions matching this typedef are expected to allocate memory for an array
- * of 'count' objects, each 'size' bytes in size. The memory is initialized to zero.
- * The function returns a pointer to the allocated memory if the allocation is successful.
- * If the allocation fails, the function returns NULL and sets the errno to ENOMEM.
- *
- * The main use of this typedef is to mock the calloc function for testing.
- *
- * @param count Number of elements to allocate memory for.
- * @param size Size of each element in bytes.
- * @return Pointer to the allocated memory block if successful; otherwise, NULL.
- */
-typedef void *(*calloc_f)(size_t count, size_t size);
-
-/**
- * Typedef for a function pointer implementing the behavior of the realloc function.
- *
- * Functions matching this typedef are expected to reallocate memory as specified by realloc,
- * possibly moving it to a new location. The function returns a pointer to the newly
- * allocated memory if the reallocation is successful. If the reallocation fails,
- * the function returns NULL and sets the errno to ENOMEM.
- *
- * The main use of this typedef is to mock the realloc function for testing.
- *
- * @param ptr Pointer to the memory block previously allocated with malloc, calloc, or realloc.
- * @param size New size in bytes for the memory block.
- * @return Pointer to the reallocated memory block if successful; otherwise, NULL.
- */
-typedef void *(*realloc_f)(void * ptr, size_t size);
 
 
 /**

@@ -34,3 +34,12 @@ void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f re
     list->katas = reallocated;
     list->katas[list->len - 1] = kata;
 }
+
+bool kata_file_exists_with_fopen(const kata_t kata, fopen_f fopen) {
+    FILE* file = (*fopen)(kata.path.str, "r"); // call the parameter function pointer fopen (see fopen_f)
+    if(file == NULL) {
+    return false;
+    }
+    fclose(file);
+    return true;
+}
