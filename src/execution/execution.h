@@ -4,9 +4,8 @@
 #include "types/types.h"
 #include "katas/katas.h"
 #define MAX_PATH_LENGTH 1024
-#define COMPILE_COMMAND "gcc -o /tmp/kata %s 2>&1"
 #define RUN_COMMAND "/tmp/kata"
-#define MAX_OUTPUT_SIZE 2048
+#define COMPILE_COMMAND "gcc -o RUN_COMMAND %s 2>&1"
 
 
 /**

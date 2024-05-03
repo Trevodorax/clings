@@ -40,14 +40,6 @@ typedef struct sized_string_t {
     size_t len;
 } sized_string_t;
 
-typedef struct run_kata_result {
-    kata_status status;
-    union {
-        sized_string_t output;
-        sized_string_t error;
-    };
-} run_kata_result_t;
-
 
 /**
  * @brief Creates a new sized_string_t with the specified length.

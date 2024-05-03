@@ -43,3 +43,13 @@ bool kata_file_exists_with_fopen(const kata_t kata, fopen_f fopen) {
     fclose(file);
     return true;
 }
+
+
+run_kata_result_t run_kata_result(kata_t kata, kata_status status, sized_string_t error_message) {
+    run_kata_result_t result = {
+            .kata = kata,
+            .status = status,
+            .error = error_message,
+    };
+    return result;
+}

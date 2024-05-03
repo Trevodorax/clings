@@ -16,11 +16,13 @@ int clings(void) {
     kata_list_t kata_list = kata_list_fetch_result.kata_list;
 
     bool no_kata = kata_list.len == 0;
-    if (no_kata) return EXIT_SUCCESS;
+    if (no_kata) {
+        return EXIT_SUCCESS;
+    }
 
     for (size_t i = 0; i < kata_list.len; i++) {
         kata_t kata = kata_list.katas[i];
-        if(!kata.is_done) {
+        if (!kata.is_done) {
             run_kata_result_t result = run_kata(kata);
             handle_kata_result(result);
             free_sized_string(&result.output);

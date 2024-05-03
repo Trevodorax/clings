@@ -4,7 +4,6 @@
 
 bool isStatusError(kata_status status) {
     switch (status) {
-        case KATA_SUCCESS: return false;
         case KATA_COMPILATION_FAILURE:
         case KATA_EXECUTION_FAILURE:
         case KATA_TEST_FAILURE:
