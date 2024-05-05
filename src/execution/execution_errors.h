@@ -9,6 +9,6 @@ run_kata_result_t compilation_failed(kata_t kata, sized_string_t output_error);
 
 run_kata_result_t execution_failed(kata_t kata, sized_string_t output_error);
 
-run_kata_result_t open_process_failed(kata_t kata, sized_string_t command);
+run_kata_result_t open_process_failed(kata_t kata, sized_string_t command, kata_status status);
 
 #endif //CLINGS_EXECUTION_ERRORS_H

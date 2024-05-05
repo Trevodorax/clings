@@ -35,7 +35,7 @@ void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f re
     list->katas[list->len - 1] = kata;
 }
 
-bool kata_file_exists_with_fopen(const kata_t kata, fopen_f fopen) {
+bool kata_file_exists(kata_t kata, fopen_f fopen) {
     FILE* file = (*fopen)(kata.path.str, "r"); // call the parameter function pointer fopen (see fopen_f)
     if(file == NULL) {
     return false;
@@ -45,11 +45,11 @@ bool kata_file_exists_with_fopen(const kata_t kata, fopen_f fopen) {
 }
 
 
-run_kata_result_t run_kata_result(kata_t kata, kata_status status, sized_string_t error_message) {
+run_kata_result_t run_kata_result(kata_t kata, kata_status status, sized_string_t output_or_error) {
     run_kata_result_t result = {
             .kata = kata,
             .status = status,
-            .error = error_message,
+            .error = output_or_error,
     };
     return result;
 }

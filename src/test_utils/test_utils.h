@@ -15,6 +15,8 @@
 #define assert_values_are_different(value1, value2) cling_assert(value1 != value2, #value1 " should NOT be equals to [" #value2 "].")
 #define assert_is_null(value) cling_assert(value == NULL, #value " should be NULL.")
 #define assert_is_not_null(value) cling_assert(value != NULL, #value " should NOT be NULL.")
+#define assert_true(value) cling_assert(value == true, #value " should be true.")
+#define assert_false(value) cling_assert(value == false, #value " should be false.")
 
 #define TEST_SUCCESS EXIT_SUCCESS
 typedef const char * test_result;

@@ -10,6 +10,7 @@ add_executable(execution_test
         execution.c
         execution_errors.h
         execution_errors.c
+        ../types/mocks.c
 )
 
 add_test(NAME execution_test COMMAND execution_test)

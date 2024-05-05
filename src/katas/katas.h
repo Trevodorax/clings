@@ -174,11 +174,15 @@ void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f re
  * @param kata The kata to check
  * @return true if the file exists, false if not
  */
-bool kata_file_exists_with_fopen(kata_t kata, fopen_f fopen);
-#define kata_file_exists(kata) kata_file_exists_with_fopen(kata, &fopen)
+bool kata_file_exists(kata_t kata, fopen_f fopen);
 
 
-// TODO doc
-run_kata_result_t run_kata_result(kata_t kata, kata_status status, sized_string_t error_message);
+/**
+ * @brief Build a run_kata_result_t with the given params
+ *
+ * @return The run_kata_result_t with the given parameters
+ * @see run_kata_result_t
+ */
+run_kata_result_t run_kata_result(kata_t kata, kata_status status, sized_string_t output_or_error);
 
 #endif //CLINGS_KATAS_H

@@ -6,6 +6,7 @@ target_include_directories(types PUBLIC ..)
 add_executable(sized_string_test
         sized_string_test.c
         sized_string.c
+        mocks.c
 )
 
 add_test(NAME sized_string_test COMMAND sized_string_test)

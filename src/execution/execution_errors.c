@@ -32,10 +32,10 @@ run_kata_result_t execution_failed(kata_t kata, sized_string_t output_error) {
     return run_kata_result(kata, KATA_EXECUTION_FAILURE, error_message);
 }
 
-run_kata_result_t open_process_failed(kata_t kata, sized_string_t command) {
+run_kata_result_t open_process_failed(kata_t kata, sized_string_t command, kata_status status) {
     const char *message = "Execution of command [%s] failed.";
     size_t message_length = length_or_max_len(strlen(message) + command.len);
     sized_string_t error_message = new_sized_string_of_length(message_length);
     snprintf(error_message.str, message_length, message, command.str);
-    return run_kata_result(kata, KATA_EXECUTION_FAILURE, error_message);
+    return run_kata_result(kata, status, error_message);
 }

@@ -90,12 +90,8 @@ static test_result should_create_new_sized_string_of_length_zero(void) {
     return TEST_SUCCESS;
 }
 
-void * failing_calloc(__attribute__((unused)) size_t count, __attribute__((unused)) size_t size) {
-    return NULL;
-}
-
 static test_result should_get_null_string_if_memory_allocation_fails(void) {
-    string = new_sized_string_of_length_with_calloc(5, &failing_calloc);
+    string = new_sized_string_of_length_with_calloc(5, failing_calloc());
 
     assert_is_null(string.str);
     assert_value_strict_equals_expected(string.len, 0);
