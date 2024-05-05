@@ -7,7 +7,7 @@ typedef struct kata_file {
         const char* directory;
 } kata_file_t;
 
-#define MAX_LINE_SIZE 64
+#define MAX_LINE_SIZE 256
 
 static const kata_file_t KATA_NAME_LIST[] = {
         { .name = "intro", .directory = "00_intro/"},

@@ -2,7 +2,7 @@
 #include "result_handler.h"
 #include "stdbool.h"
 
-bool isStatusError(kata_status status) {
+bool is_status_error(kata_status status) {
     switch (status) {
         case KATA_COMPILATION_FAILURE:
         case KATA_EXECUTION_FAILURE:
@@ -14,7 +14,7 @@ bool isStatusError(kata_status status) {
 
 void handle_kata_result(run_kata_result_t result) {
 
-    FILE * out = isStatusError(result.status) ? stderr : stdout;
+    FILE * out = is_status_error(result.status) ? stderr : stdout;
     if (result.output.str && result.output.len > 0) {
         fprintf(out, "%s", result.output.str);
     }

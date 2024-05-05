@@ -192,6 +192,19 @@ sized_string_t new_sized_string_from_str_of_length(char * str, size_t len);
  */
 void free_sized_string(sized_string_t *string);
 
+/**
+ * Frees multiple sized_string_t objects, stopping at a NULL pointer.
+ *
+ * This function accepts a variable number of sized_string_t pointers and frees the
+ * memory allocated for each of them. The function continues freeing until a NULL pointer
+ * is encountered, which indicates the end of the arguments list.
+ *
+ * Usage:
+ *    free_several_sized_strings(&string1, &string2, &string3, NULL);
+ *
+ * @param string The first sized_string_t pointer to free.
+ * @param ... Additional sized_string_t pointers to free, ending with a NULL pointer.
+ */
 void free_several_sized_strings(sized_string_t * string, ...);
 
 #endif //CLINGS_TYPES_H
