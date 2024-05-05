@@ -39,31 +39,11 @@ void before_each(void) {
     mock_fopen = memory_fopen();
     mock_popen = memory_popen();
     mock_pclose = success_pclose();
-    infrastructure = (infrastructure_t) {
-            .fopen = mock_fopen,
-            .popen = mock_popen,
-            .pclose = mock_pclose,
-    };
-    kata_result_compile_success = (run_kata_result_t) {
-            .kata = kata,
-            .status = KATA_COMPILATION_SUCCESS,
-            .output = new_sized_string_from("compiled successfully.\n")
-    };
-    kata_result_compile_failed = (run_kata_result_t) {
-            .kata = kata,
-            .status = KATA_COMPILATION_FAILURE,
-            .error = new_sized_string_from("failed to compile.\n")
-    };
-    kata_result_run_success = (run_kata_result_t) {
-            .kata = kata,
-            .status = KATA_SUCCESS,
-            .output = new_sized_string_from("...content printed in the kata...\n")
-    };
-    kata_result_run_failed = (run_kata_result_t) {
-            .kata = kata,
-            .status = KATA_COMPILATION_FAILURE,
-            .error = new_sized_string_from("failed to run. error : ...\n")
-    };
+    infrastructure = (infrastructure_t) {.fopen = mock_fopen, .popen = mock_popen, .pclose = mock_pclose, };
+    kata_result_compile_success = run_kata_result(kata, KATA_COMPILATION_SUCCESS, new_sized_string_from("compiled successfully.\n"));
+    kata_result_compile_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE, new_sized_string_from("failed to compile.\n"));
+    kata_result_run_success = run_kata_result(kata, KATA_SUCCESS, new_sized_string_from("...content printed in the kata...\n"));
+    kata_result_run_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE, new_sized_string_from("failed to run. error : ...\n"));
 }
 
 // WARNING : NOT sure at all ! A freed string may have been overwritten with one of those chars

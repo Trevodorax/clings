@@ -36,9 +36,12 @@ void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f re
 }
 
 bool kata_file_exists(kata_t kata, fopen_f fopen) {
-    FILE* file = (*fopen)(kata.path.str, "r"); // call the parameter function pointer fopen (see fopen_f)
-    if(file == NULL) {
-    return false;
+    if (!kata.path.str) {
+        return false;
+    }
+    FILE *file = (*fopen)(kata.path.str, "r"); // call the parameter function pointer fopen (see fopen_f)
+    if (file == NULL) {
+        return false;
     }
     fclose(file);
     return true;

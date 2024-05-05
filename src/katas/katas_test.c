@@ -38,6 +38,7 @@ static test_result free_kata_list_should_set_list_to_null_and_length_to_zero(voi
 static test_result free_kata_should_set_name_and_path_to_null(void);
 static test_result should_not_find_kata_file_when_fopen_returns_null(void);
 static test_result should_find_kata_file_when_fopen_finds_file(void);
+static test_result should_not_find_kata_file_when_path_is_null(void);
 
 
 static test_result all_tests(void) {
@@ -48,6 +49,7 @@ static test_result all_tests(void) {
     run_test(free_kata_should_set_name_and_path_to_null);
     run_test(should_not_find_kata_file_when_fopen_returns_null);
     run_test(should_find_kata_file_when_fopen_finds_file);
+    run_test(should_not_find_kata_file_when_path_is_null);
 
     return EXIT_SUCCESS;
 }
@@ -114,6 +116,14 @@ static test_result should_not_find_kata_file_when_fopen_returns_null(void) {
 
 static test_result should_find_kata_file_when_fopen_finds_file(void) {
     assert_true(kata_file_exists(list.katas[0], memory_fopen()));
+
+    return TEST_SUCCESS;
+}
+
+static test_result should_not_find_kata_file_when_path_is_null(void) {
+    sized_string_t null_str = (sized_string_t) {.str = NULL, .len = 0};
+    kata_t kata = {.name = null_str, .path = null_str};
+    assert_false(kata_file_exists(kata, memory_fopen()));
 
     return TEST_SUCCESS;
 }
