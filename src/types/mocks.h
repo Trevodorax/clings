@@ -23,7 +23,10 @@
  */
 typedef void *(*calloc_f)(size_t count, size_t size);
 
-// TODO doc
+/**
+ * @brief Get the implementation of calloc_f which always returns NULL.
+ * @return NULL
+ */
 calloc_f failing_calloc(void);
 
 /**
@@ -42,7 +45,10 @@ calloc_f failing_calloc(void);
  */
 typedef void *(*realloc_f)(void * ptr, size_t size);
 
-// TODO doc
+/**
+ * @brief Get the implementation of realloc_f which always returns NULL.
+ * @return NULL
+ */
 realloc_f failing_realloc(void);
 
 /**
@@ -61,8 +67,16 @@ realloc_f failing_realloc(void);
  */
 typedef FILE *(*fopen_f)(const char *filename, const char *mode);
 
-// TODO doc
+/**
+ * @brief Get the implementation of fopen_f which always returns NULL.
+ * @return NULL
+ */
 fopen_f failing_fopen(void);
+
+/**
+ * @brief Get the implementation of fopen_f which open a FILE * from a buffer in memory.
+ * @return FILE * of a buffer in memory.
+ */
 fopen_f memory_fopen(void);
 
 /**
@@ -83,14 +97,44 @@ fopen_f memory_fopen(void);
  */
 typedef FILE *(*popen_f)(const char *command, const char *mode);
 
-// TODO doc
+/**
+ * @brief Get the implementation of popen_f which always returns NULL.
+ * @return NULL
+ */
 popen_f failing_popen(void);
+
+/**
+ * @brief Get the implementation of popen_f which open a FILE * from a buffer in memory.
+ * @return FILE * of a buffer in memory.
+ */
 popen_f memory_popen(void);
 
+
+/**
+ * Typedef for a function pointer implementing the behavior of the pclose function.
+ *
+ * Functions matching this typedef are expected to close a stream opened by the popen function.
+ * The function waits for the associated command to terminate and returns the termination
+ * status of the command as returned by the waitpid function. If an error occurs, the function
+ * returns -1 and sets the errno to indicate the error condition.
+ *
+ * The main use of this typedef is to mock the pclose function for testing.
+ *
+ * @param stream Pointer to a FILE object representing a stream opened by popen.
+ * @return The termination status of the command if successful; otherwise, -1.
+ */
 typedef int (*pclose_f)(FILE *stream);
 
-// TODO doc
+/**
+ * @brief Get the implementation of pclose_f which always returns EXIT_FAILURE.
+ * @return EXIT_FAILURE
+ */
 pclose_f failing_pclose(void);
+
+/**
+ * @brief Get the implementation of pclose_f which always returns EXIT_SUCCESS.
+ * @return EXIT_SUCCESS
+ */
 pclose_f success_pclose(void);
 
 #endif //CLINGS_MOCKS_H
