@@ -37,6 +37,7 @@ static test_result clone_null_should_create_empty_string(void);
 static test_result should_concat_two_strings(void);
 static test_result should_concat_with_empty_string(void);
 static test_result should_concat_with_null_string(void);
+static test_result concat_two_strings_should_not_change_the_parameters(void);
 static test_result free_sized_string_should_set_pointer_to_null_and_length_to_zero(void);
 static test_result free_null_sized_string_should_do_nothing(void);
 static test_result should_create_new_sized_string_from_str_with_length(void);
@@ -57,6 +58,7 @@ static test_result all_tests(void) {
     run_test(should_concat_two_strings);
     run_test(should_concat_with_empty_string);
     run_test(should_concat_with_null_string);
+    run_test(concat_two_strings_should_not_change_the_parameters);
     run_test(free_sized_string_should_set_pointer_to_null_and_length_to_zero);
     run_test(free_null_sized_string_should_do_nothing);
     run_test(should_create_new_sized_string_from_str_with_length);
@@ -238,6 +240,23 @@ static test_result should_concat_with_null_string(void) {
     assert_is_not_null(concat.str);
     assert_value_strict_equals_expected(concat.len, 7);
     assert_string_equals_expected(concat.str, "world !");
+
+    free_sized_string(&first);
+    free_sized_string(&second);
+    free_sized_string(&concat);
+
+    return TEST_SUCCESS;
+}
+
+static test_result concat_two_strings_should_not_change_the_parameters(void) {
+    sized_string_t first = new_sized_string_from("Hello ");
+    char* first_str_ptr = first.str;
+    sized_string_t second = new_sized_string_from("world!");
+    char* second_str_ptr = second.str;
+    sized_string_t concat = concat_two_sized_string(first, second);
+
+    assert_value_strict_equals_expected(first.str, first_str_ptr);
+    assert_value_strict_equals_expected(second.str, second_str_ptr);
 
     free_sized_string(&first);
     free_sized_string(&second);

@@ -2,24 +2,19 @@
 #include "execution.h"
 #include "execution_errors.h"
 
-
 run_kata_result_t execution_success(kata_t kata, sized_string_t output);
 
 sized_string_t get_compile_command_for_kata(kata_t kata);
 
-run_kata_result_t compile(kata_t kata, popen_f popen, pclose_f pclose);
 
-run_kata_result_t run(run_kata_result_t compilation, popen_f popen, pclose_f pclose);
+run_kata_result_t run_kata_with_compiler_and_runner(kata_t kata, compiler_f compiler, runner_f runner, infrastructure_t infrastructure){
 
-
-run_kata_result_t run_kata_with_fopen_and_popen(const kata_t kata, fopen_f fopen, popen_f popen, pclose_f pclose) {
-
-    if (!kata_file_exists(kata, fopen)) {
+    if (!kata_file_exists(kata, infrastructure.fopen)) {
         return kata_not_found(kata);
     }
 
-    run_kata_result_t compiled = compile(kata, popen, pclose);
-    run_kata_result_t execution = run(compiled, popen, pclose);
+    run_kata_result_t compiled = (*compiler)(kata, infrastructure.popen, infrastructure.pclose);
+    run_kata_result_t execution = (*runner)(compiled, infrastructure.popen, infrastructure.pclose);
     if (execution.status != KATA_SUCCESS) {
         return execution;
     }
@@ -31,7 +26,8 @@ run_kata_result_t run_kata_with_fopen_and_popen(const kata_t kata, fopen_f fopen
     return execution_success(kata, full_output);
 }
 
-run_kata_result_t compile(const kata_t kata, popen_f popen, pclose_f pclose) {
+
+run_kata_result_t compile_with_popen_and_pclose(kata_t kata, popen_f popen, pclose_f pclose) {
     sized_string_t compile_command = get_compile_command_for_kata(kata);
 
     FILE *compilation_process = (*popen)(compile_command.str, "r");
@@ -54,7 +50,7 @@ run_kata_result_t compile(const kata_t kata, popen_f popen, pclose_f pclose) {
     };
 }
 
-run_kata_result_t run(const run_kata_result_t compilation, popen_f popen, pclose_f pclose) {
+run_kata_result_t run_with_popen_and_pclose(const run_kata_result_t compilation, popen_f popen, pclose_f pclose) {
     if (compilation.status != KATA_COMPILATION_SUCCESS) {
         return compilation;
     }
