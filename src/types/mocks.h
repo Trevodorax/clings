@@ -1,7 +1,3 @@
-//
-// Created by Théo Omnès on 03/05/2024.
-//
-
 #ifndef CLINGS_MOCKS_H
 #define CLINGS_MOCKS_H
 
