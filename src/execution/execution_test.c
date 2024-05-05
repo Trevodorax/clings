@@ -39,35 +39,20 @@ void before_each(void) {
     mock_fopen = memory_fopen();
     mock_popen = memory_popen();
     mock_pclose = success_pclose();
-    infrastructure = (infrastructure_t) {.fopen = mock_fopen, .popen = mock_popen, .pclose = mock_pclose, };
-    kata_result_compile_success = run_kata_result(kata, KATA_COMPILATION_SUCCESS, new_sized_string_from("compiled successfully.\n"));
-    kata_result_compile_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE, new_sized_string_from("failed to compile.\n"));
-    kata_result_run_success = run_kata_result(kata, KATA_SUCCESS, new_sized_string_from("content printed in the kata...\n"));
-    kata_result_run_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE, new_sized_string_from("failed to run. error : ...\n"));
+    infrastructure = (infrastructure_t) {.fopen = mock_fopen, .popen = mock_popen, .pclose = mock_pclose,};
+    kata_result_compile_success = run_kata_result(kata, KATA_COMPILATION_SUCCESS,
+                                                  new_sized_string_from("compiled successfully.\n"));
+    kata_result_compile_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE,
+                                                 new_sized_string_from("failed to compile.\n"));
+    kata_result_run_success = run_kata_result(kata, KATA_SUCCESS,
+                                              new_sized_string_from("content printed in the kata...\n"));
+    kata_result_run_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE,
+                                             new_sized_string_from("failed to run. error : ...\n"));
 }
 
-// WARNING : NOT sure at all ! A freed string may have been overwritten with one of those chars.
-// It may be the cause of errors like : pointer being freed was not allocated
-bool is_freed(sized_string_t string) {
-    char first_char = string.str[0];
-    bool is_first_char_of_a_mocked_messages = (first_char == 'c' || first_char == 'f'); // `compiled / `failed / `content...
-    return !is_first_char_of_a_mocked_messages;
-}
-
-void free_sized_string_if_not_already_freed(sized_string_t *string) {
-    if (is_freed(*string)) {
-        return;
-    }
-    free_sized_string(string);
-}
 
 void tear_down(void) {
     free_kata(&kata);
-
-    free_sized_string_if_not_already_freed(&kata_result_compile_success.output);
-    free_sized_string_if_not_already_freed(&kata_result_compile_failed.error);
-    free_sized_string_if_not_already_freed(&kata_result_run_success.output);
-    free_sized_string_if_not_already_freed(&kata_result_run_failed.error);
 }
 
 static test_result should_successfully_run_kata_when_compilation_and_run_succeeded(void);
@@ -132,6 +117,8 @@ static test_result should_successfully_run_kata_when_compilation_and_run_succeed
     assert_string_equals_expected(result.output.str, "compiled successfully.\ncontent printed in the kata...\n");
 
     free_sized_string(&result.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -141,17 +128,22 @@ static test_result should_get_compilation_error_when_compilation_failed(void) {
     assert_string_equals_expected(result.output.str, "failed to run. error : ...\n");
 
     free_sized_string(&result.error);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
     return TEST_SUCCESS;
 }
 
 static test_result should_get_file_not_found_if_file_does_not_exists(void) {
     infrastructure.fopen = failing_fopen();
-    run_kata_result_t result = run_kata_with_compiler_and_runner(kata, &compile_with_popen_and_pclose,
-                                                                 &run_with_popen_and_pclose, infrastructure);
+    run_kata_result_t result = run_kata_with_compiler_and_runner(kata, &compile_success, &run_success, infrastructure);
     assert_value_strict_equals_expected(result.status, KATA_ERROR);
     assert_string_equals_expected(result.error.str, "Kata in file [path] not found.");
 
     free_sized_string(&result.error);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -161,6 +153,10 @@ static test_result compile_should_success_if_all_succeed(void) {
     assert_string_equals_expected(result.output.str, "buffer");
 
     free_sized_string(&result.output);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -170,6 +166,10 @@ static test_result compile_should_get_compilation_error_if_call_to_compile_proce
     assert_string_equals_expected(result.error.str, "Execution of command [gcc -o /tmp/kata path 2>&1] failed.");
 
     free_sized_string(&result.error);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -179,6 +179,10 @@ static test_result compile_should_get_compilation_error_if_compilation_exits_wit
     assert_string_equals_expected(result.error.str, "Compilation of kata [path] failed : \nbuffer");
 
     free_sized_string(&result.error);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -188,6 +192,10 @@ static test_result run_should_success_if_all_succeed(void) {
     assert_string_equals_expected(result.output.str, "buffer");
 
     free_sized_string(&result.output);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -197,6 +205,9 @@ static test_result should_not_run_if_compilation_failed(void) {
     assert_string_equals_expected(result.output.str, "failed to compile.\n");
 
     free_sized_string(&result.error);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -206,6 +217,10 @@ static test_result run_should_get_execution_error_if_call_to_run_process_failed(
     assert_string_equals_expected(result.error.str, "Execution of command [/tmp/kata] failed.");
 
     free_sized_string(&result.error);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -215,6 +230,10 @@ static test_result run_should_get_execution_error_if_run_exits_with_failure_code
     assert_string_equals_expected(result.error.str, "Execution of kata [path] failed : \nbuffer");
 
     free_sized_string(&result.error);
+    free_sized_string(&kata_result_compile_success.output);
+    free_sized_string(&kata_result_run_success.output);
+    free_sized_string(&kata_result_compile_failed.error);
+    free_sized_string(&kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 

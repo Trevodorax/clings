@@ -16,6 +16,7 @@ run_kata_result_t run_kata_with_compiler_and_runner(kata_t kata, compiler_f comp
     run_kata_result_t compiled = (*compiler)(kata, infrastructure.popen, infrastructure.pclose);
     run_kata_result_t execution = (*runner)(compiled, infrastructure.popen, infrastructure.pclose);
     if (execution.status != KATA_SUCCESS) {
+        free_sized_string(&compiled.output);
         return execution;
     }
 
