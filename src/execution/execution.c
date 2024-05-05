@@ -43,11 +43,7 @@ run_kata_result_t compile_with_popen_and_pclose(kata_t kata, popen_f popen, pclo
         return compilation_failed(kata, compilation_output);
     }
 
-    return (run_kata_result_t) {
-            .kata = kata,
-            .status = KATA_COMPILATION_SUCCESS,
-            .output = compilation_output,
-    };
+    return run_kata_result(kata, KATA_COMPILATION_SUCCESS, compilation_output);
 }
 
 run_kata_result_t run_with_popen_and_pclose(const run_kata_result_t compilation, popen_f popen, pclose_f pclose) {
@@ -68,10 +64,7 @@ run_kata_result_t run_with_popen_and_pclose(const run_kata_result_t compilation,
         return execution_failed(compilation.kata, run_output);
     }
 
-    return (run_kata_result_t) {
-            .status = KATA_SUCCESS,
-            .output = run_output
-    };
+    return run_kata_result(compilation.kata, KATA_SUCCESS, run_output);
 }
 
 sized_string_t get_compile_command_for_kata(kata_t kata) {

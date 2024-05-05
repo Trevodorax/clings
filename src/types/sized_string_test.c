@@ -256,7 +256,10 @@ static test_result concat_two_strings_should_not_change_the_parameters(void) {
     sized_string_t concat = concat_two_sized_string(first, second);
 
     assert_value_strict_equals_expected(first.str, first_str_ptr);
+    assert_string_equals_expected(first.str, first_str_ptr);
+
     assert_value_strict_equals_expected(second.str, second_str_ptr);
+    assert_string_equals_expected(second.str, second_str_ptr);
 
     free_sized_string(&first);
     free_sized_string(&second);

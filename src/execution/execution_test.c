@@ -42,15 +42,15 @@ void before_each(void) {
     infrastructure = (infrastructure_t) {.fopen = mock_fopen, .popen = mock_popen, .pclose = mock_pclose, };
     kata_result_compile_success = run_kata_result(kata, KATA_COMPILATION_SUCCESS, new_sized_string_from("compiled successfully.\n"));
     kata_result_compile_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE, new_sized_string_from("failed to compile.\n"));
-    kata_result_run_success = run_kata_result(kata, KATA_SUCCESS, new_sized_string_from("...content printed in the kata...\n"));
+    kata_result_run_success = run_kata_result(kata, KATA_SUCCESS, new_sized_string_from("content printed in the kata...\n"));
     kata_result_run_failed = run_kata_result(kata, KATA_COMPILATION_FAILURE, new_sized_string_from("failed to run. error : ...\n"));
 }
 
-// WARNING : NOT sure at all ! A freed string may have been overwritten with one of those chars
-// May be the cause of errors like : pointer being freed was not allocated
+// WARNING : NOT sure at all ! A freed string may have been overwritten with one of those chars.
+// It may be the cause of errors like : pointer being freed was not allocated
 bool is_freed(sized_string_t string) {
-    char c = string.str[0];
-    bool is_first_char_of_a_mocked_messages = (c == 'c' || c == 'f' || c == '.');
+    char first_char = string.str[0];
+    bool is_first_char_of_a_mocked_messages = (first_char == 'c' || first_char == 'f'); // `compiled / `failed / `content...
     return !is_first_char_of_a_mocked_messages;
 }
 
@@ -129,7 +129,7 @@ run_kata_result_t run_failed(__attribute__((unused)) run_kata_result_t compiled,
 static test_result should_successfully_run_kata_when_compilation_and_run_succeeded(void) {
     run_kata_result_t result = run_kata_with_compiler_and_runner(kata, &compile_success, &run_success, infrastructure);
     assert_value_strict_equals_expected(result.status, KATA_SUCCESS);
-    assert_string_equals_expected(result.output.str, "compiled successfully.\n...content printed in the kata...\n");
+    assert_string_equals_expected(result.output.str, "compiled successfully.\ncontent printed in the kata...\n");
 
     free_sized_string(&result.output);
     return TEST_SUCCESS;
