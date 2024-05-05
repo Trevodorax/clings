@@ -1,6 +1,7 @@
 #ifndef CLINGS_TYPES_H
 #define CLINGS_TYPES_H
 
+#include <stdarg.h>
 #include "stdlib.h"
 #include "mocks.h"
 
@@ -190,5 +191,7 @@ sized_string_t new_sized_string_from_str_of_length(char * str, size_t len);
  * @param string The sized_string_t to be freed
  */
 void free_sized_string(sized_string_t *string);
+
+void free_several_sized_strings(sized_string_t * string, ...);
 
 #endif //CLINGS_TYPES_H

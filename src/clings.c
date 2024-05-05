@@ -25,7 +25,7 @@ int clings(void) {
         if (!kata.is_done) {
             run_kata_result_t result = run_kata(kata);
             handle_kata_result(result);
-            free_sized_string(&result.output); // (free output == free error) <= same memory space <= union
+            free_several_sized_strings(&result.output, &result.error, NULL);
             break;
         }
     }

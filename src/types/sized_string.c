@@ -1,5 +1,6 @@
 #include <string.h>
 #include "types.h"
+#include "stdarg.h"
 
 sized_string_t new_sized_string_of_length_with_calloc(size_t len, calloc_f calloc) {
     sized_string_t string;
@@ -62,5 +63,16 @@ void free_sized_string(sized_string_t *string) {
         string->str = NULL;
     }
     string->len = 0;
+}
+
+void free_several_sized_strings(sized_string_t * string, ...) {
+    va_list args;
+    sized_string_t * current;
+
+    va_start(args, string);
+    for(current = string; current != NULL; current = va_arg(args, sized_string_t*)) {
+        free_sized_string(current);
+    }
+    va_end(args);
 }
 
