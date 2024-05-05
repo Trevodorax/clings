@@ -58,8 +58,8 @@ sized_string_t concat_two_sized_string(sized_string_t first, sized_string_t seco
 
 void free_sized_string(sized_string_t *string) {
     if (string->str) {
-        free(string->str);
-        string->str = NULL;
+        free((string->str));
+        (string->str) = NULL;
     }
     string->len = 0;
 }

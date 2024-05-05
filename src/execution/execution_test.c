@@ -5,14 +5,12 @@
 #include "test_utils.h"
 #include "execution.h"
 
-#define BUFFER_SIZE 512
-
 static test_result all_tests(void);
 
 
 int main(void) {
-    const char * result = all_tests();
-    if(result == NULL) {
+    const char *result = all_tests();
+    if (result == NULL) {
         printf("ALL TESTS PASSED\n");
     } else {
         printf("%s\n", result);
@@ -22,8 +20,7 @@ int main(void) {
 }
 
 kata_t kata;
-sized_string_t buffer = {.str = NULL, .len = 0}; // TODO remove
-popen_f mock_fopen; // set to success_pclose before each test
+popen_f mock_fopen; // set to memory_fopen before each test
 popen_f mock_popen; // set to memory_popen before each test
 pclose_f mock_pclose; // set to success_pclose before each test
 infrastructure_t infrastructure;
@@ -34,11 +31,10 @@ run_kata_result_t kata_result_run_failed;
 
 void before_each(void) {
     kata = (kata_t) {
-        .name = new_sized_string_from("name"),
-        .path = new_sized_string_from("path"),
-        .is_done = false
+            .name = new_sized_string_from("name"),
+            .path = new_sized_string_from("path"),
+            .is_done = false
     };
-    buffer = new_sized_string_of_length(BUFFER_SIZE);
 
     mock_fopen = memory_fopen();
     mock_popen = memory_popen();
@@ -70,20 +66,48 @@ void before_each(void) {
     };
 }
 
+// WARNING : NOT sure at all ! A freed string may have been overwritten with one of those chars
+// May be the cause of errors like : pointer being freed was not allocated
+bool is_freed(sized_string_t string) {
+    char c = string.str[0];
+    bool is_first_char_of_a_mocked_messages = (c == 'c' || c == 'f' || c == '.');
+    return !is_first_char_of_a_mocked_messages;
+}
+
+void free_sized_string_if_not_already_freed(sized_string_t *string) {
+    if (is_freed(*string)) {
+        return;
+    }
+    free_sized_string(string);
+}
+
 void tear_down(void) {
     free_kata(&kata);
-    free_sized_string(&buffer);
+
+    free_sized_string_if_not_already_freed(&kata_result_compile_success.output);
+    free_sized_string_if_not_already_freed(&kata_result_compile_failed.error);
+    free_sized_string_if_not_already_freed(&kata_result_run_success.output);
+    free_sized_string_if_not_already_freed(&kata_result_run_failed.error);
 }
 
 static test_result should_successfully_run_kata_when_compilation_and_run_succeeded(void);
+
 static test_result should_get_compilation_error_when_compilation_failed(void);
+
 static test_result should_get_file_not_found_if_file_does_not_exists(void);
+
 static test_result compile_should_success_if_all_succeed(void);
+
 static test_result compile_should_get_compilation_error_if_call_to_compile_process_failed(void);
+
 static test_result compile_should_get_compilation_error_if_compilation_exits_with_failure_code(void);
+
 static test_result run_should_success_if_all_succeed(void);
+
 static test_result should_not_run_if_compilation_failed(void);
+
 static test_result run_should_get_execution_error_if_call_to_run_process_failed(void);
+
 static test_result run_should_get_execution_error_if_run_exits_with_failure_code(void);
 
 static test_result all_tests(void) {
@@ -101,19 +125,23 @@ static test_result all_tests(void) {
     return EXIT_SUCCESS;
 }
 
-run_kata_result_t compile_success(__attribute__((unused)) kata_t k, __attribute__((unused)) popen_f popen, __attribute__((unused)) pclose_f pclose) {
+run_kata_result_t compile_success(__attribute__((unused)) kata_t k, __attribute__((unused)) popen_f popen,
+                                  __attribute__((unused)) pclose_f pclose) {
     return kata_result_compile_success;
 }
 
-run_kata_result_t compile_fails(__attribute__((unused)) kata_t k, __attribute__((unused)) popen_f popen, __attribute__((unused)) pclose_f pclose) {
+run_kata_result_t compile_fails(__attribute__((unused)) kata_t k, __attribute__((unused)) popen_f popen,
+                                __attribute__((unused)) pclose_f pclose) {
     return kata_result_compile_failed;
 }
 
-run_kata_result_t run_success(__attribute__((unused)) run_kata_result_t compiled, __attribute__((unused)) popen_f popen, __attribute__((unused)) pclose_f pclose) {
+run_kata_result_t run_success(__attribute__((unused)) run_kata_result_t compiled, __attribute__((unused)) popen_f popen,
+                              __attribute__((unused)) pclose_f pclose) {
     return kata_result_run_success;
 }
 
-run_kata_result_t run_failed(__attribute__((unused)) run_kata_result_t compiled, __attribute__((unused)) popen_f popen, __attribute__((unused)) pclose_f pclose) {
+run_kata_result_t run_failed(__attribute__((unused)) run_kata_result_t compiled, __attribute__((unused)) popen_f popen,
+                             __attribute__((unused)) pclose_f pclose) {
     return kata_result_run_failed;
 }
 
@@ -138,7 +166,8 @@ static test_result should_get_compilation_error_when_compilation_failed(void) {
 
 static test_result should_get_file_not_found_if_file_does_not_exists(void) {
     infrastructure.fopen = failing_fopen();
-    run_kata_result_t result = run_kata_with_compiler_and_runner(kata, &compile_with_popen_and_pclose, &run_with_popen_and_pclose, infrastructure);
+    run_kata_result_t result = run_kata_with_compiler_and_runner(kata, &compile_with_popen_and_pclose,
+                                                                 &run_with_popen_and_pclose, infrastructure);
     assert_value_strict_equals_expected(result.status, KATA_ERROR);
     assert_string_equals_expected(result.error.str, "Kata in file [path] not found.");
 
