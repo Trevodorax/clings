@@ -7,6 +7,8 @@ typedef struct kata_file {
         const char* directory;
 } kata_file_t;
 
+#define MAX_LINE_SIZE 256
+
 static const kata_file_t KATA_NAME_LIST[] = {
         { .name = "intro", .directory = "00_intro/"},
         { .name = "variables 1", .directory = "01_variables/"},
@@ -17,6 +19,7 @@ static const kata_file_t KATA_NAME_LIST[] = {
 const char* KATAS_BASE_PATH = "katas/";
 
 const char* KATA_NOT_DONE_COMMENT = "// I AM NOT DONE";
+
 
 sized_string_t kata_path_from_directory_and_name(sized_string_t directory, sized_string_t kata_name);
 
@@ -64,9 +67,7 @@ sized_string_t kata_path_from_directory_and_name(sized_string_t directory, sized
 
     sized_string_t full_path = concat_two_sized_string(base_path, directory_and_c_file);
 
-    free_sized_string(&base_path);
-    free_sized_string(&c_file_name);
-    free_sized_string(&directory_and_c_file);
+    free_several_sized_strings(&base_path, &c_file_name, &directory_and_c_file, NULL);
     return full_path;
 }
 
@@ -79,8 +80,7 @@ sized_string_t c_file_name_of(sized_string_t kata_name) {
 
     sized_string_t name_with_extension = concat_two_sized_string(cleaned_file_name, extension);
 
-    free_sized_string(&cleaned_file_name);
-    free_sized_string(&extension);
+    free_several_sized_strings(&cleaned_file_name, &extension, NULL);
     return name_with_extension;
 }
 
@@ -99,12 +99,11 @@ bool is_kata_done(sized_string_t path) {
     if(kata_file == NULL) {
         return true; // file not found, marked as done => not executed
     }
-    size_t comment_length = strlen(KATA_NOT_DONE_COMMENT);
-    sized_string_t line = new_sized_string_of_length(comment_length);
+    sized_string_t line = new_sized_string_of_length(MAX_LINE_SIZE);
     bool is_done = true; // by default true if the comment not found
-    while(fgets(line.str, (int) comment_length + 1, kata_file)) {
+    while(fgets(line.str, MAX_LINE_SIZE, kata_file)) {
         line.str[strcspn(line.str, "\n")] = '\0';
-        bool contains_not_done_comment = strncmp(line.str, KATA_NOT_DONE_COMMENT, comment_length) == 0;
+        bool contains_not_done_comment = strncmp(line.str, KATA_NOT_DONE_COMMENT, MAX_LINE_SIZE) == 0;
         if (contains_not_done_comment) {
             is_done = false;
             break;

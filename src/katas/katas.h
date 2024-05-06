@@ -23,6 +23,29 @@ typedef struct kata {
 } kata_t;
 
 
+#define MAX_OUTPUT_SIZE 2048
+/**
+ * @brief Represents the result of a kata compilation or execution.
+ *
+ * The `run_kata_result` structure is used to represent a kata, which consists of a
+ * `sized_string_t` for the kata's name (`name`), another `sized_string_t`
+ * for the kata's path (`path`) and a boolean representing if it is
+ * done or not done.
+ *
+ * @see kata_t
+ * @see sized_string_t
+ * @see free_kata
+ */
+typedef struct run_kata_result {
+    kata_t kata;
+    kata_status status;
+    union {
+        sized_string_t output;
+        sized_string_t error;
+    };
+} run_kata_result_t;
+
+
 /**
  * @brief Represents a list of kata structures.
  *
@@ -144,5 +167,22 @@ void free_kata_list(kata_list_t *kata_list);
  */
 void push_kata_in_list_with_realloc(kata_t kata, kata_list_t *list, realloc_f realloc);
 #define push_kata_in_list(kata, list) push_kata_in_list_with_realloc(kata, list, &realloc)
+
+/**
+ * @brief Checks if the file path of the kata exists
+ *
+ * @param kata The kata to check
+ * @return true if the file exists, false if not
+ */
+bool kata_file_exists(kata_t kata, fopen_f fopen);
+
+
+/**
+ * @brief Build a run_kata_result_t with the given params
+ *
+ * @return The run_kata_result_t with the given parameters
+ * @see run_kata_result_t
+ */
+run_kata_result_t run_kata_result(kata_t kata, kata_status status, sized_string_t output_or_error);
 
 #endif //CLINGS_KATAS_H

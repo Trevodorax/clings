@@ -1,11 +1,17 @@
 #ifndef CLINGS_TYPES_H
 #define CLINGS_TYPES_H
 
+#include <stdarg.h>
 #include "stdlib.h"
+#include "mocks.h"
 
 typedef enum {
+    //success
     KATA_SUCCESS, // the kata is done
-    KATA_COMPILATION_FAILURE, // error at compile time
+    KATA_COMPILATION_SUCCESS, // error at compile_with_popen_and_pclose time
+
+    //errors
+    KATA_COMPILATION_FAILURE, // error at compile_with_popen_and_pclose time
     KATA_EXECUTION_FAILURE, // error at run time
     KATA_TEST_FAILURE, // at least one unit test has failed
     KATA_ERROR // there was an error (file not found, etc.)
@@ -34,39 +40,6 @@ typedef struct sized_string_t {
     char * str;
     size_t len;
 } sized_string_t;
-
-
-/**
- * Typedef for a function pointer implementing the behavior of the calloc function.
- *
- * Functions matching this typedef are expected to allocate memory for an array
- * of 'count' objects, each 'size' bytes in size. The memory is initialized to zero.
- * The function returns a pointer to the allocated memory if the allocation is successful.
- * If the allocation fails, the function returns NULL and sets the errno to ENOMEM.
- *
- * The main use of this typedef is to mock the calloc function for testing.
- *
- * @param count Number of elements to allocate memory for.
- * @param size Size of each element in bytes.
- * @return Pointer to the allocated memory block if successful; otherwise, NULL.
- */
-typedef void *(*calloc_f)(size_t count, size_t size);
-
-/**
- * Typedef for a function pointer implementing the behavior of the realloc function.
- *
- * Functions matching this typedef are expected to reallocate memory as specified by realloc,
- * possibly moving it to a new location. The function returns a pointer to the newly
- * allocated memory if the reallocation is successful. If the reallocation fails,
- * the function returns NULL and sets the errno to ENOMEM.
- *
- * The main use of this typedef is to mock the realloc function for testing.
- *
- * @param ptr Pointer to the memory block previously allocated with malloc, calloc, or realloc.
- * @param size New size in bytes for the memory block.
- * @return Pointer to the reallocated memory block if successful; otherwise, NULL.
- */
-typedef void *(*realloc_f)(void * ptr, size_t size);
 
 
 /**
@@ -218,5 +191,20 @@ sized_string_t new_sized_string_from_str_of_length(char * str, size_t len);
  * @param string The sized_string_t to be freed
  */
 void free_sized_string(sized_string_t *string);
+
+/**
+ * Frees multiple sized_string_t objects, stopping at a NULL pointer.
+ *
+ * This function accepts a variable number of sized_string_t pointers and frees the
+ * memory allocated for each of them. The function continues freeing until a NULL pointer
+ * is encountered, which indicates the end of the arguments list.
+ *
+ * Usage:
+ *    free_several_sized_strings(&string1, &string2, &string3, NULL);
+ *
+ * @param string The first sized_string_t pointer to free.
+ * @param ... Additional sized_string_t pointers to free, ending with a NULL pointer.
+ */
+void free_several_sized_strings(sized_string_t * string, ...);
 
 #endif //CLINGS_TYPES_H

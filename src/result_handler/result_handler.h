@@ -1,8 +1,9 @@
-#include "types/types.h"
 
 #ifndef CLINGS_RESULT_HANDLER_H
 #define CLINGS_RESULT_HANDLER_H
 
-void handle_kata_result(kata_status result_status, sized_string_t result_string);
+#include "katas/katas.h"
+
+void handle_kata_result(run_kata_result_t result);
 
 #endif //CLINGS_RESULT_HANDLER_H

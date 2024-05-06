@@ -1,29 +1,22 @@
 #include <stdio.h>
 #include "result_handler.h"
+#include "stdbool.h"
 
-void handle_kata_result(kata_status result_status, sized_string_t result_string) {
-    switch (result_status) {
-        case KATA_SUCCESS:
-            printf("Success !");
-            break;
+bool is_status_error(kata_status status) {
+    switch (status) {
         case KATA_COMPILATION_FAILURE:
-            printf("Compilation failure...");
-            break;
         case KATA_EXECUTION_FAILURE:
-            printf("Execution failure...");
-            break;
         case KATA_TEST_FAILURE:
-            printf("Unit tests failure...");
-            break;
-        case KATA_ERROR:
-            printf("Error");
-            break;
+        case KATA_ERROR: return true;
+        default: return false;
     }
+}
 
-    printf("\n\n");
+void handle_kata_result(run_kata_result_t result) {
 
-    if (result_string.str && result_string.len > 0) {
-        printf("%s", result_string.str);
+    FILE * out = is_status_error(result.status) ? stderr : stdout;
+    if (result.output.str && result.output.len > 0) {
+        fprintf(out, "%s", result.output.str);
     }
 
     printf("\n");

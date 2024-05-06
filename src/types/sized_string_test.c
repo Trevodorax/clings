@@ -37,6 +37,7 @@ static test_result clone_null_should_create_empty_string(void);
 static test_result should_concat_two_strings(void);
 static test_result should_concat_with_empty_string(void);
 static test_result should_concat_with_null_string(void);
+static test_result concat_two_strings_should_not_change_the_parameters(void);
 static test_result free_sized_string_should_set_pointer_to_null_and_length_to_zero(void);
 static test_result free_null_sized_string_should_do_nothing(void);
 static test_result should_create_new_sized_string_from_str_with_length(void);
@@ -57,6 +58,7 @@ static test_result all_tests(void) {
     run_test(should_concat_two_strings);
     run_test(should_concat_with_empty_string);
     run_test(should_concat_with_null_string);
+    run_test(concat_two_strings_should_not_change_the_parameters);
     run_test(free_sized_string_should_set_pointer_to_null_and_length_to_zero);
     run_test(free_null_sized_string_should_do_nothing);
     run_test(should_create_new_sized_string_from_str_with_length);
@@ -90,12 +92,8 @@ static test_result should_create_new_sized_string_of_length_zero(void) {
     return TEST_SUCCESS;
 }
 
-void * failing_calloc(__attribute__((unused)) size_t count, __attribute__((unused)) size_t size) {
-    return NULL;
-}
-
 static test_result should_get_null_string_if_memory_allocation_fails(void) {
-    string = new_sized_string_of_length_with_calloc(5, &failing_calloc);
+    string = new_sized_string_of_length_with_calloc(5, failing_calloc());
 
     assert_is_null(string.str);
     assert_value_strict_equals_expected(string.len, 0);
@@ -144,8 +142,7 @@ static test_result should_clone_string(void) {
     assert_string_equals_expected(clone.str, "clings");
     assert_value_strict_equals_expected(clone.str[6], '\0');
 
-    free_sized_string(&original);
-    free_sized_string(&clone);
+    free_several_sized_strings(&original, &clone, NULL);
 
     return TEST_SUCCESS;
 }
@@ -156,8 +153,7 @@ static test_result cloned_sized_string_should_have_different_memory_address(void
 
     assert_values_are_different(&(original.str), &(clone.str));
 
-    free_sized_string(&original);
-    free_sized_string(&clone);
+    free_several_sized_strings(&original, &clone, NULL);
 
     return TEST_SUCCESS;
 }
@@ -170,8 +166,7 @@ static test_result clone_null_should_create_empty_string(void) {
     assert_value_strict_equals_expected(clone.len, 0);
     assert_string_equals_expected(clone.str, "");
 
-    free_sized_string(&original);
-    free_sized_string(&clone);
+    free_several_sized_strings(&original, &clone, NULL);
 
     return TEST_SUCCESS;
 }
@@ -186,9 +181,7 @@ static test_result should_concat_two_strings(void) {
     assert_value_strict_equals_expected(concat.len, 12);
     assert_string_equals_expected(concat.str, "Hello world!");
 
-    free_sized_string(&first);
-    free_sized_string(&second);
-    free_sized_string(&concat);
+    free_several_sized_strings(&first, &second, &concat, NULL);
 
     return TEST_SUCCESS;
 }
@@ -202,9 +195,7 @@ static test_result should_concat_with_empty_string(void) {
     assert_value_strict_equals_expected(concat.len, 6);
     assert_string_equals_expected(concat.str, "Hello ");
 
-    free_sized_string(&first);
-    free_sized_string(&second);
-    free_sized_string(&concat);
+    free_several_sized_strings(&first, &second, &concat, NULL);
 
     first = new_sized_string_from("");
     second = new_sized_string_from("world !");
@@ -214,9 +205,7 @@ static test_result should_concat_with_empty_string(void) {
     assert_value_strict_equals_expected(concat.len, 7);
     assert_string_equals_expected(concat.str, "world !");
 
-    free_sized_string(&first);
-    free_sized_string(&second);
-    free_sized_string(&concat);
+    free_several_sized_strings(&first, &second, &concat, NULL);
 
     return TEST_SUCCESS;
 }
@@ -230,9 +219,7 @@ static test_result should_concat_with_null_string(void) {
     assert_value_strict_equals_expected(concat.len, 6);
     assert_string_equals_expected(concat.str, "Hello ");
 
-    free_sized_string(&first);
-    free_sized_string(&second);
-    free_sized_string(&concat);
+    free_several_sized_strings(&first, &second, &concat, NULL);
 
 
     first = (sized_string_t) {.str = NULL, .len = 3};
@@ -243,9 +230,25 @@ static test_result should_concat_with_null_string(void) {
     assert_value_strict_equals_expected(concat.len, 7);
     assert_string_equals_expected(concat.str, "world !");
 
-    free_sized_string(&first);
-    free_sized_string(&second);
-    free_sized_string(&concat);
+    free_several_sized_strings(&first, &second, &concat, NULL);
+
+    return TEST_SUCCESS;
+}
+
+static test_result concat_two_strings_should_not_change_the_parameters(void) {
+    sized_string_t first = new_sized_string_from("Hello ");
+    char* first_str_ptr = first.str;
+    sized_string_t second = new_sized_string_from("world!");
+    char* second_str_ptr = second.str;
+    sized_string_t concat = concat_two_sized_string(first, second);
+
+    assert_value_strict_equals_expected(first.str, first_str_ptr);
+    assert_string_equals_expected(first.str, first_str_ptr);
+
+    assert_value_strict_equals_expected(second.str, second_str_ptr);
+    assert_string_equals_expected(second.str, second_str_ptr);
+
+    free_several_sized_strings(&first, &second, &concat, NULL);
 
     return TEST_SUCCESS;
 }
@@ -275,6 +278,8 @@ static test_result should_create_new_sized_string_from_str_with_length(void) {
     assert_value_strict_equals_expected(string.len, 6);
     assert_string_equals_expected(string.str, "clings");
 
+    free_sized_string(&string);
+
     return TEST_SUCCESS;
 }
 
@@ -288,6 +293,8 @@ static test_result create_new_sized_string_from_str_with_more_length_than_enough
         assert_value_strict_equals_expected(string.str[i], '\0');
     }
 
+    free_sized_string(&string);
+
     return TEST_SUCCESS;
 }
 
@@ -298,6 +305,8 @@ static test_result create_new_sized_string_from_str_with_not_enough_should_trunc
     assert_value_strict_equals_expected(string.len, 3);
     assert_string_equals_expected(string.str, "abc");
 
+    free_sized_string(&string);
+
     return TEST_SUCCESS;
 }
 
@@ -307,6 +316,8 @@ static test_result create_new_sized_string_from_null_should_create_empty_string(
     assert_is_not_null(string.str);
     assert_value_strict_equals_expected(string.len, 0);
     assert_string_equals_expected(string.str, "");
+
+    free_sized_string(&string);
 
     return TEST_SUCCESS;
 }
