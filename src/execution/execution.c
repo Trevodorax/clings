@@ -21,7 +21,7 @@ run_kata_result_t run_kata_with_compiler_and_runner(kata_t kata, compiler_f comp
     }
 
     sized_string_t full_output = concat_two_sized_string(compiled.output, execution.output);
-    free_several_sized_strings(&compiled.output, &execution.output, NULL);
+    free_several_sized_strings(&compiled.output, &execution.output);
 
     return execution_success(kata, full_output);
 }

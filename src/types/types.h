@@ -205,6 +205,24 @@ void free_sized_string(sized_string_t *string);
  * @param string The first sized_string_t pointer to free.
  * @param ... Additional sized_string_t pointers to free, ending with a NULL pointer.
  */
-void free_several_sized_strings(sized_string_t * string, ...);
+void free_several_sized_strings_(sized_string_t * string, ...);
+
+/**
+ * Frees multiple sized_string_t objects.
+ *
+ * This macro provides a convenient way to free multiple sized_string_t objects by
+ * automatically appending a NULL pointer to the argument list. It simplifies the
+ * usage of the free_several_sized_strings_ function by eliminating the need for
+ * the user to manually include a NULL pointer at the end of the argument list.
+ *
+ * Usage:
+ *    free_several_sized_strings(&string1, &string2, &string3);
+ *
+ * This macro expands to a call to free_several_sized_strings_ with the provided
+ * arguments followed by a NULL pointer.
+ *
+ * @param ... A list of sized_string_t pointers to free.
+ */
+#define free_several_sized_strings(...) free_several_sized_strings_(__VA_ARGS__, NULL)
 
 #endif //CLINGS_TYPES_H

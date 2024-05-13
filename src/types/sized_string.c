@@ -65,7 +65,7 @@ void free_sized_string(sized_string_t *string) {
     string->len = 0;
 }
 
-void free_several_sized_strings(sized_string_t * string, ...) {
+void free_several_sized_strings_(sized_string_t * string, ...) {
     va_list args;
     sized_string_t * current;
 
@@ -75,4 +75,5 @@ void free_several_sized_strings(sized_string_t * string, ...) {
     }
     va_end(args);
 }
+
 
