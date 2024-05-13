@@ -116,7 +116,7 @@ static test_result should_successfully_run_kata_when_compilation_and_run_succeed
     assert_value_strict_equals_expected(result.status, KATA_SUCCESS);
     assert_string_equals_expected(result.output.str, "compiled successfully.\ncontent printed in the kata...\n");
 
-    free_several_sized_strings(&result.output, &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+    free_several_sized_strings(&result.output, &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -125,8 +125,7 @@ static test_result should_get_compilation_error_when_compilation_failed(void) {
     assert_value_strict_equals_expected(result.status, KATA_COMPILATION_FAILURE);
     assert_string_equals_expected(result.output.str, "failed to run. error : ...\n");
 
-    free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               NULL);
+    free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output);
     return TEST_SUCCESS;
 }
 
@@ -137,7 +136,7 @@ static test_result should_get_file_not_found_if_file_does_not_exists(void) {
     assert_string_equals_expected(result.error.str, "Kata in file [path] not found.");
 
     free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+                               &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -147,7 +146,7 @@ static test_result compile_should_success_if_all_succeed(void) {
     assert_string_equals_expected(result.output.str, "buffer");
 
     free_several_sized_strings(&result.output, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+                               &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -157,7 +156,7 @@ static test_result compile_should_get_compilation_error_if_call_to_compile_proce
     assert_string_equals_expected(result.error.str, "Execution of command [gcc -o /tmp/kata path 2>&1] failed.");
 
     free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+                               &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -167,7 +166,7 @@ static test_result compile_should_get_compilation_error_if_compilation_exits_wit
     assert_string_equals_expected(result.error.str, "Compilation of kata [path] failed : \nbuffer");
 
     free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+                               &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -177,7 +176,7 @@ static test_result run_should_success_if_all_succeed(void) {
     assert_string_equals_expected(result.output.str, "buffer");
 
     free_several_sized_strings(&result.output, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+                               &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -187,7 +186,7 @@ static test_result should_not_run_if_compilation_failed(void) {
     assert_string_equals_expected(result.output.str, "failed to compile.\n");
 
     free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_run_failed.error, NULL);
+                               &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -197,7 +196,7 @@ static test_result run_should_get_execution_error_if_call_to_run_process_failed(
     assert_string_equals_expected(result.error.str, "Execution of command [/tmp/kata] failed.");
 
     free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+                               &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 
@@ -207,7 +206,7 @@ static test_result run_should_get_execution_error_if_run_exits_with_failure_code
     assert_string_equals_expected(result.error.str, "Execution of kata [path] failed : \nbuffer");
 
     free_several_sized_strings(&result.error, &kata_result_compile_success.output, &kata_result_run_success.output,
-                               &kata_result_compile_failed.error, &kata_result_run_failed.error, NULL);
+                               &kata_result_compile_failed.error, &kata_result_run_failed.error);
     return TEST_SUCCESS;
 }
 

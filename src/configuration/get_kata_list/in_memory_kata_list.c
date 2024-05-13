@@ -67,7 +67,7 @@ sized_string_t kata_path_from_directory_and_name(sized_string_t directory, sized
 
     sized_string_t full_path = concat_two_sized_string(base_path, directory_and_c_file);
 
-    free_several_sized_strings(&base_path, &c_file_name, &directory_and_c_file, NULL);
+    free_several_sized_strings(&base_path, &c_file_name, &directory_and_c_file);
     return full_path;
 }
 
@@ -80,7 +80,7 @@ sized_string_t c_file_name_of(sized_string_t kata_name) {
 
     sized_string_t name_with_extension = concat_two_sized_string(cleaned_file_name, extension);
 
-    free_several_sized_strings(&cleaned_file_name, &extension, NULL);
+    free_several_sized_strings(&cleaned_file_name, &extension);
     return name_with_extension;
 }
 

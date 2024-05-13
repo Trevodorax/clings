@@ -13,7 +13,7 @@ void free_kata_list(kata_list_t *kata_list) {
 
 void free_kata(kata_t *kata) {
     if (kata) {
-        free_several_sized_strings(&kata->name, &kata->path, NULL);
+        free_several_sized_strings(&kata->name, &kata->path);
     }
 }
 
